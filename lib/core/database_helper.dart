@@ -74,6 +74,7 @@ class DatabaseHelper {
     if (db != null) {
       await db.close();
       _database = null;
+      _instance = null;  // Clear instance so a new one will be created
     }
   }
 }

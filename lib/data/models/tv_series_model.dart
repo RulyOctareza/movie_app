@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 import '../../domain/entities/tv_series.dart';
-import '../../domain/entities/season.dart';
 import '../models/season_model.dart';
 
 class TvSeriesModel extends Equatable {

@@ -1,4 +1,3 @@
-import 'package:expert_flutter_dicoding/core/constants.dart';
 import 'package:expert_flutter_dicoding/main.dart' as app;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

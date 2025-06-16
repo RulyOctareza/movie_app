@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryLo">40.9&nbsp;%</td>
+            <td class="headerCovTableEntryHi">93.2&nbsp;%</td>
             <td class="headerCovTableEntry">44</td>
-            <td class="headerCovTableEntry">18</td>
+            <td class="headerCovTableEntry">41</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2025-06-16 12:03:59</td>
+            <td class="headerValue">2025-06-16 12:24:44</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -64,84 +64,83 @@
 <span id="L2"><span class="lineNum">       2</span>              : import 'package:equatable/equatable.dart';</span>
 <span id="L3"><span class="lineNum">       3</span>              : </span>
 <span id="L4"><span class="lineNum">       4</span>              : import '../../domain/entities/tv_series.dart';</span>
-<span id="L5"><span class="lineNum">       5</span>              : import '../../domain/entities/season.dart';</span>
-<span id="L6"><span class="lineNum">       6</span>              : import '../models/season_model.dart';</span>
-<span id="L7"><span class="lineNum">       7</span>              : </span>
-<span id="L8"><span class="lineNum">       8</span>              : class TvSeriesModel extends Equatable {</span>
-<span id="L9"><span class="lineNum">       9</span>              :   final int id;</span>
-<span id="L10"><span class="lineNum">      10</span>              :   final String name;</span>
-<span id="L11"><span class="lineNum">      11</span>              :   final String? posterPath;</span>
-<span id="L12"><span class="lineNum">      12</span>              :   final String? overview;</span>
-<span id="L13"><span class="lineNum">      13</span>              :   final double voteAverage;</span>
-<span id="L14"><span class="lineNum">      14</span>              :   final List&lt;SeasonModel&gt;? seasons;</span>
-<span id="L15"><span class="lineNum">      15</span>              :   final int? numberOfSeasons;</span>
-<span id="L16"><span class="lineNum">      16</span>              :   final int? numberOfEpisodes;</span>
-<span id="L17"><span class="lineNum">      17</span>              : </span>
-<span id="L18"><span class="lineNum">      18</span> <span class="tlaGNC">           2 :   const TvSeriesModel({</span></span>
-<span id="L19"><span class="lineNum">      19</span>              :     required this.id,</span>
-<span id="L20"><span class="lineNum">      20</span>              :     required this.name,</span>
-<span id="L21"><span class="lineNum">      21</span>              :     this.posterPath,</span>
-<span id="L22"><span class="lineNum">      22</span>              :     this.overview,</span>
-<span id="L23"><span class="lineNum">      23</span>              :     required this.voteAverage,</span>
-<span id="L24"><span class="lineNum">      24</span>              :     this.seasons,</span>
-<span id="L25"><span class="lineNum">      25</span>              :     this.numberOfSeasons,</span>
-<span id="L26"><span class="lineNum">      26</span>              :     this.numberOfEpisodes,</span>
-<span id="L27"><span class="lineNum">      27</span>              :   });</span>
-<span id="L28"><span class="lineNum">      28</span>              : </span>
-<span id="L29"><span class="lineNum">      29</span> <span class="tlaUNC">           0 :   factory TvSeriesModel.fromJson(Map&lt;String, dynamic&gt; json) =&gt; TvSeriesModel(</span></span>
-<span id="L30"><span class="lineNum">      30</span> <span class="tlaUNC">           0 :         id: json[&quot;id&quot;],</span></span>
-<span id="L31"><span class="lineNum">      31</span> <span class="tlaUNC">           0 :         name: json[&quot;name&quot;],</span></span>
-<span id="L32"><span class="lineNum">      32</span> <span class="tlaUNC">           0 :         posterPath: json[&quot;poster_path&quot;],</span></span>
-<span id="L33"><span class="lineNum">      33</span> <span class="tlaUNC">           0 :         overview: json[&quot;overview&quot;],</span></span>
-<span id="L34"><span class="lineNum">      34</span> <span class="tlaUNC">           0 :         voteAverage: json[&quot;vote_average&quot;]?.toDouble() ?? 0.0,</span></span>
-<span id="L35"><span class="lineNum">      35</span> <span class="tlaUNC">           0 :         numberOfSeasons: json[&quot;number_of_seasons&quot;],</span></span>
-<span id="L36"><span class="lineNum">      36</span> <span class="tlaUNC">           0 :         numberOfEpisodes: json[&quot;number_of_episodes&quot;],</span></span>
-<span id="L37"><span class="lineNum">      37</span> <span class="tlaUNC">           0 :         seasons: json[&quot;seasons&quot;] != null</span></span>
-<span id="L38"><span class="lineNum">      38</span> <span class="tlaUNC">           0 :             ? (json[&quot;seasons&quot;] is String </span></span>
-<span id="L39"><span class="lineNum">      39</span> <span class="tlaUNC">           0 :                 ? (jsonDecode(json[&quot;seasons&quot;]) as List)</span></span>
-<span id="L40"><span class="lineNum">      40</span> <span class="tlaUNC">           0 :                     .map((x) =&gt; SeasonModel.fromJson(x))</span></span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaUNC">           0 :                     .toList()</span></span>
-<span id="L42"><span class="lineNum">      42</span> <span class="tlaUNC">           0 :                 : (json[&quot;seasons&quot;] as List)</span></span>
-<span id="L43"><span class="lineNum">      43</span> <span class="tlaUNC">           0 :                     .map((x) =&gt; SeasonModel.fromJson(x))</span></span>
-<span id="L44"><span class="lineNum">      44</span> <span class="tlaUNC">           0 :                     .toList())</span></span>
-<span id="L45"><span class="lineNum">      45</span>              :             : null,</span>
-<span id="L46"><span class="lineNum">      46</span>              :       );</span>
-<span id="L47"><span class="lineNum">      47</span>              : </span>
-<span id="L48"><span class="lineNum">      48</span> <span class="tlaUNC">           0 :   Map&lt;String, dynamic&gt; toJson() =&gt; {</span></span>
-<span id="L49"><span class="lineNum">      49</span> <span class="tlaUNC">           0 :         &quot;id&quot;: id,</span></span>
-<span id="L50"><span class="lineNum">      50</span> <span class="tlaUNC">           0 :         &quot;name&quot;: name,</span></span>
-<span id="L51"><span class="lineNum">      51</span> <span class="tlaUNC">           0 :         &quot;poster_path&quot;: posterPath,</span></span>
-<span id="L52"><span class="lineNum">      52</span> <span class="tlaUNC">           0 :         &quot;overview&quot;: overview,</span></span>
-<span id="L53"><span class="lineNum">      53</span> <span class="tlaUNC">           0 :         &quot;vote_average&quot;: voteAverage,</span></span>
-<span id="L54"><span class="lineNum">      54</span> <span class="tlaUNC">           0 :         &quot;number_of_seasons&quot;: numberOfSeasons,</span></span>
-<span id="L55"><span class="lineNum">      55</span> <span class="tlaUNC">           0 :         &quot;number_of_episodes&quot;: numberOfEpisodes,</span></span>
-<span id="L56"><span class="lineNum">      56</span> <span class="tlaUNC">           0 :         &quot;seasons&quot;: seasons != null</span></span>
-<span id="L57"><span class="lineNum">      57</span> <span class="tlaUNC">           0 :             ? jsonEncode(seasons!.map((x) =&gt; x.toJson()).toList())</span></span>
-<span id="L58"><span class="lineNum">      58</span>              :             : null,</span>
-<span id="L59"><span class="lineNum">      59</span>              :       };</span>
-<span id="L60"><span class="lineNum">      60</span>              : </span>
-<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">           1 :   TvSeries toEntity() {</span></span>
-<span id="L62"><span class="lineNum">      62</span> <span class="tlaGNC">           1 :     return TvSeries(</span></span>
-<span id="L63"><span class="lineNum">      63</span> <span class="tlaGNC">           1 :       id: id,</span></span>
-<span id="L64"><span class="lineNum">      64</span> <span class="tlaGNC">           1 :       name: name,</span></span>
-<span id="L65"><span class="lineNum">      65</span> <span class="tlaGNC">           1 :       posterPath: posterPath ?? &quot;&quot;,</span></span>
-<span id="L66"><span class="lineNum">      66</span> <span class="tlaGNC">           1 :       overview: overview ?? &quot;&quot;,</span></span>
-<span id="L67"><span class="lineNum">      67</span> <span class="tlaGNC">           1 :       voteAverage: voteAverage,</span></span>
-<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">           1 :       seasons: seasons?.map((model) =&gt; model.toEntity()).toList(),</span></span>
-<span id="L69"><span class="lineNum">      69</span> <span class="tlaGNC">           1 :       numberOfSeasons: numberOfSeasons,</span></span>
-<span id="L70"><span class="lineNum">      70</span> <span class="tlaGNC">           1 :       numberOfEpisodes: numberOfEpisodes,</span></span>
-<span id="L71"><span class="lineNum">      71</span>              :     );</span>
-<span id="L72"><span class="lineNum">      72</span>              :   }</span>
-<span id="L73"><span class="lineNum">      73</span>              : </span>
-<span id="L74"><span class="lineNum">      74</span> <span class="tlaGNC">           1 :   @override</span></span>
-<span id="L75"><span class="lineNum">      75</span> <span class="tlaGNC">           1 :   List&lt;Object?&gt; get props =&gt; [</span></span>
-<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">           1 :         id,</span></span>
-<span id="L77"><span class="lineNum">      77</span> <span class="tlaGNC">           1 :         name,</span></span>
-<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">           1 :         posterPath,</span></span>
-<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">           1 :         overview,</span></span>
-<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">           1 :         voteAverage,</span></span>
-<span id="L81"><span class="lineNum">      81</span>              :       ];</span>
-<span id="L82"><span class="lineNum">      82</span>              : }</span>
+<span id="L5"><span class="lineNum">       5</span>              : import '../models/season_model.dart';</span>
+<span id="L6"><span class="lineNum">       6</span>              : </span>
+<span id="L7"><span class="lineNum">       7</span>              : class TvSeriesModel extends Equatable {</span>
+<span id="L8"><span class="lineNum">       8</span>              :   final int id;</span>
+<span id="L9"><span class="lineNum">       9</span>              :   final String name;</span>
+<span id="L10"><span class="lineNum">      10</span>              :   final String? posterPath;</span>
+<span id="L11"><span class="lineNum">      11</span>              :   final String? overview;</span>
+<span id="L12"><span class="lineNum">      12</span>              :   final double voteAverage;</span>
+<span id="L13"><span class="lineNum">      13</span>              :   final List&lt;SeasonModel&gt;? seasons;</span>
+<span id="L14"><span class="lineNum">      14</span>              :   final int? numberOfSeasons;</span>
+<span id="L15"><span class="lineNum">      15</span>              :   final int? numberOfEpisodes;</span>
+<span id="L16"><span class="lineNum">      16</span>              : </span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">           5 :   const TvSeriesModel({</span></span>
+<span id="L18"><span class="lineNum">      18</span>              :     required this.id,</span>
+<span id="L19"><span class="lineNum">      19</span>              :     required this.name,</span>
+<span id="L20"><span class="lineNum">      20</span>              :     this.posterPath,</span>
+<span id="L21"><span class="lineNum">      21</span>              :     this.overview,</span>
+<span id="L22"><span class="lineNum">      22</span>              :     required this.voteAverage,</span>
+<span id="L23"><span class="lineNum">      23</span>              :     this.seasons,</span>
+<span id="L24"><span class="lineNum">      24</span>              :     this.numberOfSeasons,</span>
+<span id="L25"><span class="lineNum">      25</span>              :     this.numberOfEpisodes,</span>
+<span id="L26"><span class="lineNum">      26</span>              :   });</span>
+<span id="L27"><span class="lineNum">      27</span>              : </span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">           2 :   factory TvSeriesModel.fromJson(Map&lt;String, dynamic&gt; json) =&gt; TvSeriesModel(</span></span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">           1 :         id: json[&quot;id&quot;],</span></span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">           1 :         name: json[&quot;name&quot;],</span></span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaGNC">           1 :         posterPath: json[&quot;poster_path&quot;],</span></span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">           1 :         overview: json[&quot;overview&quot;],</span></span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">           2 :         voteAverage: json[&quot;vote_average&quot;]?.toDouble() ?? 0.0,</span></span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           1 :         numberOfSeasons: json[&quot;number_of_seasons&quot;],</span></span>
+<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">           1 :         numberOfEpisodes: json[&quot;number_of_episodes&quot;],</span></span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">           1 :         seasons: json[&quot;seasons&quot;] != null</span></span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">           2 :             ? (json[&quot;seasons&quot;] is String </span></span>
+<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">           2 :                 ? (jsonDecode(json[&quot;seasons&quot;]) as List)</span></span>
+<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">           3 :                     .map((x) =&gt; SeasonModel.fromJson(x))</span></span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">           1 :                     .toList()</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaUNC">           0 :                 : (json[&quot;seasons&quot;] as List)</span></span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaUNC">           0 :                     .map((x) =&gt; SeasonModel.fromJson(x))</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaUNC">           0 :                     .toList())</span></span>
+<span id="L44"><span class="lineNum">      44</span>              :             : null,</span>
+<span id="L45"><span class="lineNum">      45</span>              :       );</span>
+<span id="L46"><span class="lineNum">      46</span>              : </span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           2 :   Map&lt;String, dynamic&gt; toJson() =&gt; {</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           1 :         &quot;id&quot;: id,</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           1 :         &quot;name&quot;: name,</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">           1 :         &quot;poster_path&quot;: posterPath,</span></span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">           1 :         &quot;overview&quot;: overview,</span></span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">           1 :         &quot;vote_average&quot;: voteAverage,</span></span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">           1 :         &quot;number_of_seasons&quot;: numberOfSeasons,</span></span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">           1 :         &quot;number_of_episodes&quot;: numberOfEpisodes,</span></span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           1 :         &quot;seasons&quot;: seasons != null</span></span>
+<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">           6 :             ? jsonEncode(seasons!.map((x) =&gt; x.toJson()).toList())</span></span>
+<span id="L57"><span class="lineNum">      57</span>              :             : null,</span>
+<span id="L58"><span class="lineNum">      58</span>              :       };</span>
+<span id="L59"><span class="lineNum">      59</span>              : </span>
+<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">           1 :   TvSeries toEntity() {</span></span>
+<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">           1 :     return TvSeries(</span></span>
+<span id="L62"><span class="lineNum">      62</span> <span class="tlaGNC">           1 :       id: id,</span></span>
+<span id="L63"><span class="lineNum">      63</span> <span class="tlaGNC">           1 :       name: name,</span></span>
+<span id="L64"><span class="lineNum">      64</span> <span class="tlaGNC">           1 :       posterPath: posterPath ?? &quot;&quot;,</span></span>
+<span id="L65"><span class="lineNum">      65</span> <span class="tlaGNC">           1 :       overview: overview ?? &quot;&quot;,</span></span>
+<span id="L66"><span class="lineNum">      66</span> <span class="tlaGNC">           1 :       voteAverage: voteAverage,</span></span>
+<span id="L67"><span class="lineNum">      67</span> <span class="tlaGNC">           1 :       seasons: seasons?.map((model) =&gt; model.toEntity()).toList(),</span></span>
+<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">           1 :       numberOfSeasons: numberOfSeasons,</span></span>
+<span id="L69"><span class="lineNum">      69</span> <span class="tlaGNC">           1 :       numberOfEpisodes: numberOfEpisodes,</span></span>
+<span id="L70"><span class="lineNum">      70</span>              :     );</span>
+<span id="L71"><span class="lineNum">      71</span>              :   }</span>
+<span id="L72"><span class="lineNum">      72</span>              : </span>
+<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">           2 :   @override</span></span>
+<span id="L74"><span class="lineNum">      74</span> <span class="tlaGNC">           2 :   List&lt;Object?&gt; get props =&gt; [</span></span>
+<span id="L75"><span class="lineNum">      75</span> <span class="tlaGNC">           2 :         id,</span></span>
+<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">           2 :         name,</span></span>
+<span id="L77"><span class="lineNum">      77</span> <span class="tlaGNC">           2 :         posterPath,</span></span>
+<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">           2 :         overview,</span></span>
+<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">           2 :         voteAverage,</span></span>
+<span id="L80"><span class="lineNum">      80</span>              :       ];</span>
+<span id="L81"><span class="lineNum">      81</span>              : }</span>
         </pre>
               </td>
             </tr>

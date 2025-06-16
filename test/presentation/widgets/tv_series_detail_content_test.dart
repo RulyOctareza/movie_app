@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:expert_flutter_dicoding/core/constants.dart';
 import 'package:expert_flutter_dicoding/domain/entities/season.dart';
 import 'package:expert_flutter_dicoding/domain/entities/tv_series.dart';
 import 'package:expert_flutter_dicoding/presentation/pages/tv_series_detail_page.dart';
@@ -13,7 +11,7 @@ void main() {
     );
   }
 
-  final testTvSeries = TvSeries(
+  const testTvSeries = TvSeries(
     id: 1,
     name: 'name',
     posterPath: 'posterPath',
@@ -22,7 +20,7 @@ void main() {
     numberOfSeasons: 2,
     numberOfEpisodes: 24,
     seasons: [
-      const Season(
+      Season(
         id: 1,
         name: 'Season 1',
         overview: 'First season',
@@ -31,7 +29,7 @@ void main() {
         episodeCount: 12,
         airDate: '2021-01-01',
       ),
-      const Season(
+      Season(
         id: 2,
         name: 'Season 2',
         overview: 'Second season',
@@ -53,7 +51,7 @@ void main() {
         final seasonsFinder = find.text('Seasons: 2');
 
         await tester.pumpWidget(makeTestableWidget(
-          DetailContent(testTvSeries, false),
+          const DetailContent(testTvSeries, false),
         ));
 
         expect(contentFinder, findsOneWidget);
@@ -66,7 +64,7 @@ void main() {
     testWidgets(
       'should not display season information when not available',
       (WidgetTester tester) async {
-        final testTvSeriesWithoutSeasons = TvSeries(
+        const testTvSeriesWithoutSeasons = TvSeries(
           id: 1,
           name: 'name',
           posterPath: 'posterPath',
@@ -79,7 +77,7 @@ void main() {
         final seasonsFinder = find.text('Seasons');
 
         await tester.pumpWidget(makeTestableWidget(
-          DetailContent(testTvSeriesWithoutSeasons, false),
+          const DetailContent(testTvSeriesWithoutSeasons, false),
         ));
 
         expect(seasonTextFinder, findsNothing);
