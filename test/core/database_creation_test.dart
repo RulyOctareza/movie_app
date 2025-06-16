@@ -44,7 +44,8 @@ void main() {
       expect(createScript.toLowerCase(), contains('poster_path text'));
       expect(createScript.toLowerCase(), contains('vote_average real'));
       expect(createScript.toLowerCase(), contains('number_of_seasons integer'));
-      expect(createScript.toLowerCase(), contains('number_of_episodes integer'));
+      expect(
+          createScript.toLowerCase(), contains('number_of_episodes integer'));
       expect(createScript.toLowerCase(), contains('seasons text'));
 
       // Test inserting data to verify table structure
@@ -74,7 +75,7 @@ void main() {
       await databaseHelper.close();
       final dbPath = await getDatabasesPath();
       final dbFile = File(join(dbPath, DBConstants.databaseName));
-      
+
       if (await dbFile.exists()) {
         await dbFile.delete();
       }
@@ -99,13 +100,11 @@ void main() {
       await databaseHelper.close();
       final dbPath = await getDatabasesPath();
       final dbFile = File(join(dbPath, DBConstants.databaseName));
-      
+
       // Create v1 database with test data
-      final oldDb = await openDatabase(
-        dbFile.path,
-        version: 1,
-        onCreate: (db, version) async {
-          await db.execute('''
+      final oldDb = await openDatabase(dbFile.path, version: 1,
+          onCreate: (db, version) async {
+        await db.execute('''
             CREATE TABLE ${DBConstants.watchlistTable} (
               id INTEGER PRIMARY KEY,
               name TEXT,
@@ -115,16 +114,15 @@ void main() {
             )
           ''');
 
-          // Insert test data
-          await db.insert(DBConstants.watchlistTable, {
-            'id': 1,
-            'name': 'Old Test Show',
-            'overview': 'Test Overview',
-            'poster_path': '/test.jpg',
-            'vote_average': 8.5
-          });
-        }
-      );
+        // Insert test data
+        await db.insert(DBConstants.watchlistTable, {
+          'id': 1,
+          'name': 'Old Test Show',
+          'overview': 'Test Overview',
+          'poster_path': '/test.jpg',
+          'vote_average': 8.5
+        });
+      });
       await oldDb.close();
 
       // Get database instance (triggers upgrade)
@@ -137,7 +135,8 @@ void main() {
       final createScript = table.first['sql'] as String;
 
       expect(createScript.toLowerCase(), contains('number_of_seasons integer'));
-      expect(createScript.toLowerCase(), contains('number_of_episodes integer'));
+      expect(
+          createScript.toLowerCase(), contains('number_of_episodes integer'));
       expect(createScript.toLowerCase(), contains('seasons text'));
 
       // Verify old data is preserved
@@ -148,15 +147,14 @@ void main() {
 
       // Verify new columns can be updated
       await db.update(
-        DBConstants.watchlistTable,
-        {
-          'number_of_seasons': 3,
-          'number_of_episodes': 30,
-          'seasons': '["S1","S2","S3"]'
-        },
-        where: 'id = ?',
-        whereArgs: [1]
-      );
+          DBConstants.watchlistTable,
+          {
+            'number_of_seasons': 3,
+            'number_of_episodes': 30,
+            'seasons': '["S1","S2","S3"]'
+          },
+          where: 'id = ?',
+          whereArgs: [1]);
 
       final updatedResult = await db.query(DBConstants.watchlistTable);
       expect(updatedResult.first['number_of_seasons'], 3);
@@ -171,11 +169,9 @@ void main() {
       final dbFile = File(join(dbPath, DBConstants.databaseName));
 
       // Create v1 database with invalid data
-      final oldDb = await openDatabase(
-        dbFile.path,
-        version: 1,
-        onCreate: (db, version) async {
-          await db.execute('''
+      final oldDb = await openDatabase(dbFile.path, version: 1,
+          onCreate: (db, version) async {
+        await db.execute('''
             CREATE TABLE ${DBConstants.watchlistTable} (
               id INTEGER PRIMARY KEY,
               name TEXT,
@@ -185,13 +181,12 @@ void main() {
             )
           ''');
 
-          // Insert invalid data that will cause upgrade validation to fail
-          await db.rawInsert('''
+        // Insert invalid data that will cause upgrade validation to fail
+        await db.rawInsert('''
             INSERT INTO ${DBConstants.watchlistTable} (id, name, overview, poster_path, vote_average)
             VALUES (1, 'Test Show', 'Overview', '/test.jpg', 'not-a-number')
           ''');
-        }
-      );
+      });
       await oldDb.close();
 
       // act & assert

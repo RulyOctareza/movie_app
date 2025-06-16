@@ -39,7 +39,8 @@ void main() {
     (WidgetTester tester) async {
       when(mockNotifier.tvSeriesState).thenReturn(RequestState.loading);
 
-      await tester.pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
+      await tester
+          .pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     },
@@ -51,7 +52,8 @@ void main() {
       when(mockNotifier.tvSeriesState).thenReturn(RequestState.error);
       when(mockNotifier.message).thenReturn('Error message');
 
-      await tester.pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
+      await tester
+          .pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
 
       expect(find.text('Error message'), findsOneWidget);
     },
@@ -64,7 +66,8 @@ void main() {
       when(mockNotifier.tvSeries).thenReturn(testTvSeries);
       when(mockNotifier.isAddedToWatchlist).thenReturn(false);
 
-      await tester.pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
+      await tester
+          .pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
 
       expect(find.byType(DetailContent), findsOneWidget);
     },

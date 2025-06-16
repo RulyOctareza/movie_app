@@ -122,37 +122,38 @@ class TestDatabaseFactory implements DatabaseFactory {
   }
 
   @override
-  Future<Database> openDatabase(String path, {OpenDatabaseOptions? options}) async {
+  Future<Database> openDatabase(String path,
+      {OpenDatabaseOptions? options}) async {
     throw Exception('Failed to open database');
   }
 
   @override
   Future<String> getDatabasesPath() async => _path;
-  
+
   @override
   Future<bool> databaseExists(String path) {
     // TODO: implement databaseExists
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> deleteDatabase(String path) {
     // TODO: implement deleteDatabase
     throw UnimplementedError();
   }
-  
+
   @override
   Future<Uint8List> readDatabaseBytes(String path) {
     // TODO: implement readDatabaseBytes
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> setDatabasesPath(String path) {
     // TODO: implement setDatabasesPath
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> writeDatabaseBytes(String path, Uint8List bytes) {
     // TODO: implement writeDatabaseBytes
@@ -160,33 +161,32 @@ class TestDatabaseFactory implements DatabaseFactory {
   }
 }
 
+@override
+Future<bool> databaseExists(String path) {
+  // TODO: implement databaseExists
+  throw UnimplementedError();
+}
 
-  @override
-  Future<bool> databaseExists(String path) {
-    // TODO: implement databaseExists
-    throw UnimplementedError();
-  }
+@override
+Future<void> deleteDatabase(String path) {
+  // TODO: implement deleteDatabase
+  throw UnimplementedError();
+}
 
-  @override
-  Future<void> deleteDatabase(String path) {
-    // TODO: implement deleteDatabase
-    throw UnimplementedError();
-  }
+@override
+Future<Uint8List> readDatabaseBytes(String path) {
+  // TODO: implement readDatabaseBytes
+  throw UnimplementedError();
+}
 
-  @override
-  Future<Uint8List> readDatabaseBytes(String path) {
-    // TODO: implement readDatabaseBytes
-    throw UnimplementedError();
-  }
+@override
+Future<void> setDatabasesPath(String path) {
+  // TODO: implement setDatabasesPath
+  throw UnimplementedError();
+}
 
-  @override
-  Future<void> setDatabasesPath(String path) {
-    // TODO: implement setDatabasesPath
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> writeDatabaseBytes(String path, Uint8List bytes) {
-    // TODO: implement writeDatabaseBytes
-    throw UnimplementedError();
-  }
+@override
+Future<void> writeDatabaseBytes(String path, Uint8List bytes) {
+  // TODO: implement writeDatabaseBytes
+  throw UnimplementedError();
+}

@@ -30,7 +30,7 @@ void main() {
     test('should handle double close gracefully', () async {
       // arrange
       await databaseHelper.database; // ensure database is open
-      
+
       // act & assert
       await databaseHelper.close(); // first close
       await databaseHelper.close(); // second close should not throw
@@ -41,11 +41,11 @@ void main() {
       await databaseHelper.close();
       final dbPath = await getDatabasesPath();
       final dbFile = File(join(dbPath, DBConstants.databaseName));
-      
+
       if (await dbFile.exists()) {
         await dbFile.delete();
       }
-      
+
       // Create a corrupted database file
       await dbFile.writeAsString('corrupt content');
 
@@ -58,10 +58,10 @@ void main() {
     test('should handle multiple database initialization attempts', () async {
       // arrange
       final db1 = await databaseHelper.database;
-      
+
       // act
       final db2 = await databaseHelper.database;
-      
+
       // assert
       expect(identical(db1, db2), isTrue);
     });
@@ -71,7 +71,7 @@ void main() {
       await databaseHelper.close();
       final dbPath = await getDatabasesPath();
       final dbFile = File(join(dbPath, DBConstants.databaseName));
-      
+
       // Create v1 database
       final oldDb = await openDatabase(
         dbFile.path,
@@ -104,7 +104,7 @@ void main() {
       await databaseHelper.close();
       final dbPath = await getDatabasesPath();
       final dbFile = File(join(dbPath, DBConstants.databaseName));
-      
+
       // Create v1 database with valid schema but corrupt data
       final oldDb = await openDatabase(
         dbFile.path,
@@ -119,7 +119,7 @@ void main() {
               vote_average REAL
             )
           ''');
-          
+
           // Insert invalid data that will cause upgrade to fail
           await db.execute('''
             INSERT INTO ${DBConstants.watchlistTable} (id, name, overview, poster_path, vote_average)

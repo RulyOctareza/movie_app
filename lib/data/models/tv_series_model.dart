@@ -34,7 +34,7 @@ class TvSeriesModel extends Equatable {
         numberOfSeasons: json["number_of_seasons"],
         numberOfEpisodes: json["number_of_episodes"],
         seasons: json["seasons"] != null
-            ? (json["seasons"] is String 
+            ? (json["seasons"] is String
                 ? (jsonDecode(json["seasons"]) as List)
                     .map((x) => SeasonModel.fromJson(x))
                     .toList()

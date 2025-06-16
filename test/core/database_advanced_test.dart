@@ -50,7 +50,7 @@ void main() {
       await databaseHelper.close();
       final dbPath = await getDatabasesPath();
       final dbFile = File(join(dbPath, DBConstants.databaseName));
-      
+
       // Create a v1 database
       final oldDb = await openDatabase(
         dbFile.path,
@@ -88,7 +88,7 @@ void main() {
       await databaseHelper.close();
       final dbPath = await getDatabasesPath();
       final dbFile = File(join(dbPath, DBConstants.databaseName));
-      
+
       // Create a v1 database with sample data
       final oldDb = await openDatabase(
         dbFile.path,
@@ -103,7 +103,7 @@ void main() {
               vote_average REAL
             )
           ''');
-          
+
           // Insert test data
           await db.insert(DBConstants.watchlistTable, {
             'id': 1,
@@ -118,13 +118,13 @@ void main() {
 
       // Get a new database instance (should trigger upgrade)
       final db = await databaseHelper.database;
-      
+
       // Check if new columns exist
       final table = await db.query('sqlite_master',
           where: 'type = ? AND name = ?',
           whereArgs: ['table', DBConstants.watchlistTable]);
       final createScript = table.first['sql'] as String;
-      
+
       expect(createScript.toLowerCase(), contains('number_of_seasons'));
       expect(createScript.toLowerCase(), contains('number_of_episodes'));
       expect(createScript.toLowerCase(), contains('seasons'));
@@ -133,7 +133,7 @@ void main() {
       final result = await db.query(DBConstants.watchlistTable);
       expect(result.length, 1);
       expect(result.first['name'], 'Test Show');
-      
+
       // cleanup
       if (await dbFile.exists()) {
         await dbFile.delete();

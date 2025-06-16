@@ -130,7 +130,8 @@ void main() {
       // arrange
       when(mockDatabaseHelper.database).thenAnswer((_) async => MockDatabase());
       // act
-      final result = await dataSource.getTvSeriesById(2); // Use different ID to test not found case
+      final result = await dataSource
+          .getTvSeriesById(2); // Use different ID to test not found case
       // assert
       expect(result, isNull);
     });

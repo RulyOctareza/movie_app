@@ -193,9 +193,9 @@ class DetailContent extends StatelessWidget {
                                                 child:
                                                     CircularProgressIndicator(),
                                               ),
-                                              errorWidget: (context, url,
-                                                      error) =>
-                                                  const Icon(Icons.error),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
                                             )
                                           : null,
                                       title: Text(season.name),

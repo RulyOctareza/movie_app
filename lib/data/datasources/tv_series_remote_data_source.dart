@@ -26,9 +26,10 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
     final response = await client.get(uri);
 
     if (response.statusCode == 200) {
-      return List<TvSeriesModel>.from((json.decode(response.body)['results'] as List)
-          .map((x) => TvSeriesModel.fromJson(x))
-          .where((element) => element.posterPath != null));
+      return List<TvSeriesModel>.from(
+          (json.decode(response.body)['results'] as List)
+              .map((x) => TvSeriesModel.fromJson(x))
+              .where((element) => element.posterPath != null));
     } else {
       throw Exception('Failed to fetch now playing TV series');
     }
@@ -42,9 +43,10 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
     final response = await client.get(uri);
 
     if (response.statusCode == 200) {
-      return List<TvSeriesModel>.from((json.decode(response.body)['results'] as List)
-          .map((x) => TvSeriesModel.fromJson(x))
-          .where((element) => element.posterPath != null));
+      return List<TvSeriesModel>.from(
+          (json.decode(response.body)['results'] as List)
+              .map((x) => TvSeriesModel.fromJson(x))
+              .where((element) => element.posterPath != null));
     } else {
       throw Exception('Failed to fetch popular TV series');
     }
@@ -58,9 +60,10 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
     final response = await client.get(uri);
 
     if (response.statusCode == 200) {
-      return List<TvSeriesModel>.from((json.decode(response.body)['results'] as List)
-          .map((x) => TvSeriesModel.fromJson(x))
-          .where((element) => element.posterPath != null));
+      return List<TvSeriesModel>.from(
+          (json.decode(response.body)['results'] as List)
+              .map((x) => TvSeriesModel.fromJson(x))
+              .where((element) => element.posterPath != null));
     } else {
       throw Exception('Failed to fetch top rated TV series');
     }
@@ -88,9 +91,10 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
     final response = await client.get(uri);
 
     if (response.statusCode == 200) {
-      return List<TvSeriesModel>.from((json.decode(response.body)['results'] as List)
-          .map((x) => TvSeriesModel.fromJson(x))
-          .where((element) => element.posterPath != null));
+      return List<TvSeriesModel>.from(
+          (json.decode(response.body)['results'] as List)
+              .map((x) => TvSeriesModel.fromJson(x))
+              .where((element) => element.posterPath != null));
     } else {
       throw Exception('Failed to fetch TV series recommendations');
     }
@@ -107,9 +111,10 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
     final response = await client.get(uri);
 
     if (response.statusCode == 200) {
-      return List<TvSeriesModel>.from((json.decode(response.body)['results'] as List)
-          .map((x) => TvSeriesModel.fromJson(x))
-          .where((element) => element.posterPath != null));
+      return List<TvSeriesModel>.from(
+          (json.decode(response.body)['results'] as List)
+              .map((x) => TvSeriesModel.fromJson(x))
+              .where((element) => element.posterPath != null));
     } else {
       throw Exception('Failed to search TV series');
     }

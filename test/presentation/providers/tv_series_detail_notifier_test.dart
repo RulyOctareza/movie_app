@@ -143,7 +143,8 @@ void main() {
       expect(listenerCallCount, 1);
     });
 
-    test('should update watchlist status when remove watchlist success', () async {
+    test('should update watchlist status when remove watchlist success',
+        () async {
       // arrange
       when(mockGetWatchlistTvSeries.removeWatchlist(tTvSeries))
           .thenAnswer((_) async => const Right('Removed from Watchlist'));
@@ -162,8 +163,8 @@ void main() {
 
     test('should handle failure when saving watchlist fails', () async {
       // arrange
-      when(mockGetWatchlistTvSeries.saveWatchlist(tTvSeries))
-          .thenAnswer((_) async => const Left(DatabaseFailure('Database Failure')));
+      when(mockGetWatchlistTvSeries.saveWatchlist(tTvSeries)).thenAnswer(
+          (_) async => const Left(DatabaseFailure('Database Failure')));
       when(mockGetWatchlistTvSeries.isAddedToWatchlist(tTvSeries.id))
           .thenAnswer((_) async => false);
 
@@ -179,8 +180,8 @@ void main() {
 
     test('should handle failure when removing from watchlist fails', () async {
       // arrange
-      when(mockGetWatchlistTvSeries.removeWatchlist(tTvSeries))
-          .thenAnswer((_) async => const Left(DatabaseFailure('Database Failure')));
+      when(mockGetWatchlistTvSeries.removeWatchlist(tTvSeries)).thenAnswer(
+          (_) async => const Left(DatabaseFailure('Database Failure')));
       when(mockGetWatchlistTvSeries.isAddedToWatchlist(tTvSeries.id))
           .thenAnswer((_) async => true);
 

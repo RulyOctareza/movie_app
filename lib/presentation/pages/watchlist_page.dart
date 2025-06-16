@@ -9,7 +9,6 @@ class WatchlistPage extends StatefulWidget {
 
   @override
   State<WatchlistPage> createState() => _WatchlistPageState();
-   
 }
 
 class _WatchlistPageState extends State<WatchlistPage> {
@@ -18,7 +17,6 @@ class _WatchlistPageState extends State<WatchlistPage> {
     super.initState();
 
     Future.microtask(() =>
-    
         Provider.of<WatchlistTvSeriesNotifier>(context, listen: false)
             .fetchWatchlistTvSeries());
   }

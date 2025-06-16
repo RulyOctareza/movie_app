@@ -27,7 +27,10 @@ void main() {
       when(mockHttpClient.get(Uri.parse('${Urls.baseUrl}/tv/on_the_air')
               .replace(queryParameters: {'api_key': Urls.apiKey})))
           .thenAnswer((_) async => http.Response(
-              jsonEncode({'results': [testTvSeriesMap]}), 200));
+              jsonEncode({
+                'results': [testTvSeriesMap]
+              }),
+              200));
       // act
       final result = await dataSource.getNowPlayingTvSeries();
       // assert
@@ -55,7 +58,10 @@ void main() {
       when(mockHttpClient.get(Uri.parse('${Urls.baseUrl}/tv/popular')
               .replace(queryParameters: {'api_key': Urls.apiKey})))
           .thenAnswer((_) async => http.Response(
-              jsonEncode({'results': [testTvSeriesMap]}), 200));
+              jsonEncode({
+                'results': [testTvSeriesMap]
+              }),
+              200));
       // act
       final result = await dataSource.getPopularTvSeries();
       // assert
@@ -83,7 +89,10 @@ void main() {
       when(mockHttpClient.get(Uri.parse('${Urls.baseUrl}/tv/top_rated')
               .replace(queryParameters: {'api_key': Urls.apiKey})))
           .thenAnswer((_) async => http.Response(
-              jsonEncode({'results': [testTvSeriesMap]}), 200));
+              jsonEncode({
+                'results': [testTvSeriesMap]
+              }),
+              200));
       // act
       final result = await dataSource.getTopRatedTvSeries();
       // assert
@@ -112,8 +121,8 @@ void main() {
       // arrange
       when(mockHttpClient.get(Uri.parse('${Urls.baseUrl}/tv/$tId')
               .replace(queryParameters: {'api_key': Urls.apiKey})))
-          .thenAnswer((_) async =>
-              http.Response(jsonEncode(testTvSeriesMap), 200));
+          .thenAnswer(
+              (_) async => http.Response(jsonEncode(testTvSeriesMap), 200));
       // act
       final result = await dataSource.getTvSeriesDetail(tId);
       // assert
@@ -140,10 +149,14 @@ void main() {
     test('should return list of TV Series Model when the response code is 200',
         () async {
       // arrange
-      when(mockHttpClient.get(Uri.parse('${Urls.baseUrl}/tv/$tId/recommendations')
-              .replace(queryParameters: {'api_key': Urls.apiKey})))
+      when(mockHttpClient.get(
+              Uri.parse('${Urls.baseUrl}/tv/$tId/recommendations')
+                  .replace(queryParameters: {'api_key': Urls.apiKey})))
           .thenAnswer((_) async => http.Response(
-              jsonEncode({'results': [testTvSeriesMap]}), 200));
+              jsonEncode({
+                'results': [testTvSeriesMap]
+              }),
+              200));
       // act
       final result = await dataSource.getTvSeriesRecommendations(tId);
       // assert
@@ -154,8 +167,9 @@ void main() {
         'should throw a ServerException when the response code is 404 or other',
         () async {
       // arrange
-      when(mockHttpClient.get(Uri.parse('${Urls.baseUrl}/tv/$tId/recommendations')
-              .replace(queryParameters: {'api_key': Urls.apiKey})))
+      when(mockHttpClient.get(
+              Uri.parse('${Urls.baseUrl}/tv/$tId/recommendations')
+                  .replace(queryParameters: {'api_key': Urls.apiKey})))
           .thenAnswer((_) async => http.Response('Not Found', 404));
       // act
       final call = dataSource.getTvSeriesRecommendations(tId);
@@ -170,13 +184,15 @@ void main() {
     test('should return list of TV Series Model when the response code is 200',
         () async {
       // arrange
-      when(mockHttpClient.get(Uri.parse('${Urls.baseUrl}/search/tv')
-              .replace(queryParameters: {
-                'api_key': Urls.apiKey,
-                'query': tQuery,
-              })))
-          .thenAnswer((_) async => http.Response(
-              jsonEncode({'results': [testTvSeriesMap]}), 200));
+      when(mockHttpClient
+          .get(Uri.parse('${Urls.baseUrl}/search/tv').replace(queryParameters: {
+        'api_key': Urls.apiKey,
+        'query': tQuery,
+      }))).thenAnswer((_) async => http.Response(
+          jsonEncode({
+            'results': [testTvSeriesMap]
+          }),
+          200));
       // act
       final result = await dataSource.searchTvSeries(tQuery);
       // assert
@@ -187,12 +203,11 @@ void main() {
         'should throw a ServerException when the response code is 404 or other',
         () async {
       // arrange
-      when(mockHttpClient.get(Uri.parse('${Urls.baseUrl}/search/tv')
-              .replace(queryParameters: {
-                'api_key': Urls.apiKey,
-                'query': tQuery,
-              })))
-          .thenAnswer((_) async => http.Response('Not Found', 404));
+      when(mockHttpClient
+          .get(Uri.parse('${Urls.baseUrl}/search/tv').replace(queryParameters: {
+        'api_key': Urls.apiKey,
+        'query': tQuery,
+      }))).thenAnswer((_) async => http.Response('Not Found', 404));
       // act
       final call = dataSource.searchTvSeries(tQuery);
       // assert
