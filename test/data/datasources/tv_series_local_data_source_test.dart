@@ -1,3 +1,4 @@
+import 'package:expert_flutter_dicoding/core/constants.dart';
 import 'package:expert_flutter_dicoding/core/database_helper.dart';
 import 'package:expert_flutter_dicoding/data/datasources/tv_series_local_data_source.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,7 +10,54 @@ import '../../dummy_data/dummy_objects.dart';
 import 'tv_series_local_data_source_test.mocks.dart';
 
 // Mock class for Database
-class MockDatabase extends Mock implements Database {}
+class MockDatabase extends Mock implements Database {
+  @override
+  Future<List<Map<String, Object?>>> query(
+    String table, {
+    bool? distinct,
+    List<String>? columns,
+    String? where,
+    List<Object?>? whereArgs,
+    String? groupBy,
+    String? having,
+    String? orderBy,
+    int? limit,
+    int? offset,
+  }) async {
+    if (table == DBConstants.watchlistTable) {
+      if (where == null) {
+        // getWatchlistTvSeries()
+        return [testTvSeriesModel.toJson()];
+      } else if (where == 'id = ?') {
+        // getTvSeriesById()
+        final id = whereArgs?.first as int;
+        if (id == 1) {
+          return [testTvSeriesModel.toJson()];
+        }
+      }
+    }
+    return [];
+  }
+
+  @override
+  Future<int> delete(
+    String table, {
+    String? where,
+    List<Object?>? whereArgs,
+  }) async {
+    return 1;
+  }
+
+  @override
+  Future<int> insert(
+    String table,
+    Map<String, Object?> values, {
+    String? nullColumnHack,
+    ConflictAlgorithm? conflictAlgorithm,
+  }) async {
+    return 1;
+  }
+}
 
 @GenerateMocks([DatabaseHelper])
 void main() {
@@ -82,9 +130,9 @@ void main() {
       // arrange
       when(mockDatabaseHelper.database).thenAnswer((_) async => MockDatabase());
       // act
-      final result = await dataSource.getTvSeriesById(tId);
+      final result = await dataSource.getTvSeriesById(2); // Use different ID to test not found case
       // assert
-      expect(result, null);
+      expect(result, isNull);
     });
   });
 

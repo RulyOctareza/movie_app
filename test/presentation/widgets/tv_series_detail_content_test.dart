@@ -85,5 +85,62 @@ void main() {
         expect(seasonsFinder, findsNothing);
       },
     );
+
+    testWidgets(
+      'should show add to watchlist button when not in watchlist',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(makeTestableWidget(
+          const DetailContent(testTvSeries, false),
+        ));
+
+        final watchlistButtonFinder = find.byType(ElevatedButton);
+        final addIconFinder = find.byIcon(Icons.add);
+
+        expect(watchlistButtonFinder, findsOneWidget);
+        expect(addIconFinder, findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'should show check icon when in watchlist',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(makeTestableWidget(
+          const DetailContent(testTvSeries, true),
+        ));
+
+        final watchlistButtonFinder = find.byType(ElevatedButton);
+        final checkIconFinder = find.byIcon(Icons.check);
+
+        expect(watchlistButtonFinder, findsOneWidget);
+        expect(checkIconFinder, findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'should display back button and handle navigation',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(makeTestableWidget(
+          const DetailContent(testTvSeries, false),
+        ));
+
+        final backButtonFinder = find.byIcon(Icons.arrow_back);
+        expect(backButtonFinder, findsOneWidget);
+
+        await tester.tap(backButtonFinder);
+        await tester.pumpAndSettle();
+      },
+    );
+
+    testWidgets(
+      'should show loading indicator when loading image',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(makeTestableWidget(
+          const DetailContent(testTvSeries, false),
+        ));
+
+        // Verify that CircularProgressIndicator is shown while loading
+        expect(find.byType(CircularProgressIndicator), findsWidgets);
+      },
+    );
   });
 }

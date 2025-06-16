@@ -159,5 +159,39 @@ void main() {
       expect(provider.watchlistMessage, 'Removed from Watchlist');
       expect(listenerCallCount, 1);
     });
+
+    test('should handle failure when saving watchlist fails', () async {
+      // arrange
+      when(mockGetWatchlistTvSeries.saveWatchlist(tTvSeries))
+          .thenAnswer((_) async => const Left(DatabaseFailure('Database Failure')));
+      when(mockGetWatchlistTvSeries.isAddedToWatchlist(tTvSeries.id))
+          .thenAnswer((_) async => false);
+
+      // act
+      await provider.addWatchlist(tTvSeries);
+
+      // assert
+      verify(mockGetWatchlistTvSeries.saveWatchlist(tTvSeries));
+      expect(provider.watchlistMessage, 'Database Failure');
+      expect(provider.isAddedToWatchlist, false);
+      expect(listenerCallCount, 1);
+    });
+
+    test('should handle failure when removing from watchlist fails', () async {
+      // arrange
+      when(mockGetWatchlistTvSeries.removeWatchlist(tTvSeries))
+          .thenAnswer((_) async => const Left(DatabaseFailure('Database Failure')));
+      when(mockGetWatchlistTvSeries.isAddedToWatchlist(tTvSeries.id))
+          .thenAnswer((_) async => true);
+
+      // act
+      await provider.removeFromWatchlist(tTvSeries);
+
+      // assert
+      verify(mockGetWatchlistTvSeries.removeWatchlist(tTvSeries));
+      expect(provider.watchlistMessage, 'Database Failure');
+      expect(provider.isAddedToWatchlist, true);
+      expect(listenerCallCount, 1);
+    });
   });
 }
