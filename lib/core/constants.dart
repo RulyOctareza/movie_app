@@ -6,6 +6,6 @@ class Urls {
 
 class DBConstants {
   static const String databaseName = 'ditonton.db';
-  static const int databaseVersion = 1;
+  static const int databaseVersion = 2;
   static const String watchlistTable = 'watchlist';
 }

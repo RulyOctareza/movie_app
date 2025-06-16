@@ -43,7 +43,7 @@ void main() {
           .thenAnswer((_) async => Right(tTvSeriesList));
 
       // act
-      await provider.fetchTvSeriesSearch(tQuery);
+      provider.fetchTvSeriesSearch(tQuery);
 
       // assert
       expect(provider.state, RequestState.loading);

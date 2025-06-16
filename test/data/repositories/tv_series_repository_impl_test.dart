@@ -367,7 +367,7 @@ void main() {
       // assert
       verify(mockLocalDataSource.insertWatchlist(tTvSeriesModel));
       expect(result,
-          equals(const Left(DatabaseFailure('Failed to add watchlist'))));
+          Left(DatabaseFailure(Exception('Failed to add watchlist').toString())));
     });
   });
 
@@ -392,7 +392,7 @@ void main() {
       // assert
       verify(mockLocalDataSource.removeWatchlist(tTvSeriesModel));
       expect(result,
-          equals(const Left(DatabaseFailure('Failed to remove watchlist'))));
+          Left(DatabaseFailure(Exception('Failed to remove watchlist').toString())));
     });
   });
 
@@ -432,7 +432,7 @@ void main() {
       // assert
       verify(mockLocalDataSource.getWatchlistTvSeries());
       expect(result,
-          equals(const Left(DatabaseFailure('Failed to get watchlist'))));
+          Left(DatabaseFailure(Exception('Failed to get watchlist').toString())));
     });
   });
 }

@@ -121,17 +121,15 @@ class DetailContent extends StatelessWidget {
                                 if (message == 'Added to Watchlist' ||
                                     message == 'Removed from Watchlist') {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(message)),
-                                  );
+                                      SnackBar(content: Text(message)));
                                 } else {
                                   showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: Text(message),
-                                      );
-                                    },
-                                  );
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Text(message),
+                                        );
+                                      });
                                 }
                               },
                               child: Row(
@@ -151,7 +149,64 @@ class DetailContent extends StatelessWidget {
                                 color: kRichBlack,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 16),
+                            // Add Seasons info
+                            if (tvSeries.numberOfSeasons != null)
+                              Text(
+                                'Seasons: ${tvSeries.numberOfSeasons}',
+                                style: kTextTheme.bodyMedium?.copyWith(
+                                  color: kRichBlack,
+                                ),
+                              ),
+                            if (tvSeries.numberOfEpisodes != null)
+                              Text(
+                                '${tvSeries.numberOfEpisodes} Episodes',
+                                style: kTextTheme.bodyMedium?.copyWith(
+                                  color: kRichBlack,
+                                ),
+                              ),
+                            if (tvSeries.seasons?.isNotEmpty == true) ...[
+                              const SizedBox(height: 16),
+                              Text(
+                                'Season List',
+                                style: kTextTheme.headlineMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: kRichBlack,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: tvSeries.seasons?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  final season = tvSeries.seasons![index];
+                                  return Card(
+                                    child: ListTile(
+                                      leading: season.posterPath != null
+                                          ? CachedNetworkImage(
+                                              width: 50,
+                                              imageUrl:
+                                                  '${Urls.baseImageUrl}${season.posterPath}',
+                                              placeholder: (context, url) =>
+                                                  const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                              errorWidget: (context, url,
+                                                      error) =>
+                                                  const Icon(Icons.error),
+                                            )
+                                          : null,
+                                      title: Text(season.name),
+                                      subtitle: Text(
+                                          '${season.episodeCount} Episodes • ${season.airDate}'),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                            const SizedBox(height: 16),
                             Text(
                               'Overview',
                               style: kTextTheme.headlineLarge?.copyWith(

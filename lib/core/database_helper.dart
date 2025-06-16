@@ -27,6 +27,7 @@ class DatabaseHelper {
         databasePath,
         version: DBConstants.databaseVersion,
         onCreate: _onCreate,
+        onUpgrade: _onUpgrade,
       );
 
       return db;
@@ -42,9 +43,30 @@ class DatabaseHelper {
         name TEXT,
         overview TEXT,
         poster_path TEXT,
-        vote_average REAL
+        vote_average REAL,
+        number_of_seasons INTEGER,
+        number_of_episodes INTEGER,
+        seasons TEXT
       );
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Add new columns for season information
+      await db.execute('''
+        ALTER TABLE ${DBConstants.watchlistTable}
+        ADD COLUMN number_of_seasons INTEGER;
+      ''');
+      await db.execute('''
+        ALTER TABLE ${DBConstants.watchlistTable}
+        ADD COLUMN number_of_episodes INTEGER;
+      ''');
+      await db.execute('''
+        ALTER TABLE ${DBConstants.watchlistTable}
+        ADD COLUMN seasons TEXT;
+      ''');
+    }
   }
 
   Future<void> close() async {
