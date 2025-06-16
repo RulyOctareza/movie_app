@@ -66,14 +66,54 @@ void main() {
   test('should handle database initialization errors', () async {
     // arrange
     await databaseHelper.close();
-    databaseFactory =
-        null; // This will cause an error when trying to open the database
+    
+    // Set an invalid path that will cause initialization to fail
+    final invalidPath = join('invalid', 'path', 'that', 'doesnt', 'exist');
+    when(getDatabasesPath()).thenAnswer((_) async => invalidPath);
 
     // act & assert
     expect(() async {
       await databaseHelper.database;
-    }, throwsException);
+    }, throwsA(isA<Exception>()));
   });
+
+  test('should throw exception when database initialization fails', () async {
+    // arrange
+    await databaseHelper.close();
+    final oldFactory = databaseFactory;
+    databaseFactory = MockDatabaseFactory(throwError: true);
+
+    // act & assert
+    expect(() async {
+      await databaseHelper.database;
+    }, throwsA(isA<Exception>()));
+
+    // cleanup
+    databaseFactory = oldFactory;
+  });
+
+  // Mock database factory that can simulate errors
+  class MockDatabaseFactory implements DatabaseFactory {
+    final bool throwError;
+    MockDatabaseFactory({this.throwError = false});
+
+    @override
+    Future<Database> openDatabase(String path, {int? version, OnDatabaseConfigureFn? onConfigure, OnDatabaseCreateFn? onCreate, OnDatabaseVersionChangeFn? onUpgrade, OnDatabaseVersionChangeFn? onDowngrade, OnDatabaseOpenFn? onOpen, bool readOnly = false, bool singleInstance = true}) async {
+      if (throwError) {
+        throw Exception('Failed to open database');
+      }
+      throw UnimplementedError();
+    }
+
+    @override
+    Future<void> deleteDatabase(String path) async {}
+
+    @override
+    Future<bool> databaseExists(String path) async => false;
+
+    @override
+    Future<String> getDatabasesPath() async => '';
+  }
 
   test('should add new columns when upgrading database version', () async {
     final oldPath = await getDatabasesPath();
