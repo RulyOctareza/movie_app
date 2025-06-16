@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2025-06-16 12:48:30</td>
+            <td class="headerValue">2025-06-16 13:18:42</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -72,7 +72,7 @@
 <span id="L10"><span class="lineNum">      10</span>              :   final int episodeCount;</span>
 <span id="L11"><span class="lineNum">      11</span>              :   final String airDate;</span>
 <span id="L12"><span class="lineNum">      12</span>              : </span>
-<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">           6 :   const SeasonModel({</span></span>
+<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">           9 :   const SeasonModel({</span></span>
 <span id="L14"><span class="lineNum">      14</span>              :     required this.id,</span>
 <span id="L15"><span class="lineNum">      15</span>              :     required this.name,</span>
 <span id="L16"><span class="lineNum">      16</span>              :     required this.overview,</span>
@@ -82,35 +82,35 @@
 <span id="L20"><span class="lineNum">      20</span>              :     required this.airDate,</span>
 <span id="L21"><span class="lineNum">      21</span>              :   });</span>
 <span id="L22"><span class="lineNum">      22</span>              : </span>
-<span id="L23"><span class="lineNum">      23</span> <span class="tlaGNC">           6 :   factory SeasonModel.fromJson(Map&lt;String, dynamic&gt; json) =&gt; SeasonModel(</span></span>
-<span id="L24"><span class="lineNum">      24</span> <span class="tlaGNC">           3 :         id: json[&quot;id&quot;],</span></span>
-<span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">           3 :         name: json[&quot;name&quot;],</span></span>
-<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC">           3 :         overview: json[&quot;overview&quot;] ?? &quot;&quot;,</span></span>
-<span id="L27"><span class="lineNum">      27</span> <span class="tlaGNC">           3 :         posterPath: json[&quot;poster_path&quot;],</span></span>
-<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">           3 :         seasonNumber: json[&quot;season_number&quot;],</span></span>
-<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">           3 :         episodeCount: json[&quot;episode_count&quot;] ?? 0,</span></span>
-<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">           3 :         airDate: json[&quot;air_date&quot;] ?? &quot;&quot;,</span></span>
+<span id="L23"><span class="lineNum">      23</span> <span class="tlaGNC">           8 :   factory SeasonModel.fromJson(Map&lt;String, dynamic&gt; json) =&gt; SeasonModel(</span></span>
+<span id="L24"><span class="lineNum">      24</span> <span class="tlaGNC">           4 :         id: json[&quot;id&quot;],</span></span>
+<span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">           4 :         name: json[&quot;name&quot;],</span></span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC">           4 :         overview: json[&quot;overview&quot;] ?? &quot;&quot;,</span></span>
+<span id="L27"><span class="lineNum">      27</span> <span class="tlaGNC">           4 :         posterPath: json[&quot;poster_path&quot;],</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">           4 :         seasonNumber: json[&quot;season_number&quot;],</span></span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">           4 :         episodeCount: json[&quot;episode_count&quot;] ?? 0,</span></span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">           4 :         airDate: json[&quot;air_date&quot;] ?? &quot;&quot;,</span></span>
 <span id="L31"><span class="lineNum">      31</span>              :       );</span>
 <span id="L32"><span class="lineNum">      32</span>              : </span>
-<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">           4 :   Map&lt;String, dynamic&gt; toJson() =&gt; {</span></span>
-<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           2 :         &quot;id&quot;: id,</span></span>
-<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">           2 :         &quot;name&quot;: name,</span></span>
-<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">           2 :         &quot;overview&quot;: overview,</span></span>
-<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">           2 :         &quot;poster_path&quot;: posterPath,</span></span>
-<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">           2 :         &quot;season_number&quot;: seasonNumber,</span></span>
-<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">           2 :         &quot;episode_count&quot;: episodeCount,</span></span>
-<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">           2 :         &quot;air_date&quot;: airDate,</span></span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">           6 :   Map&lt;String, dynamic&gt; toJson() =&gt; {</span></span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           3 :         &quot;id&quot;: id,</span></span>
+<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">           3 :         &quot;name&quot;: name,</span></span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">           3 :         &quot;overview&quot;: overview,</span></span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">           3 :         &quot;poster_path&quot;: posterPath,</span></span>
+<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">           3 :         &quot;season_number&quot;: seasonNumber,</span></span>
+<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">           3 :         &quot;episode_count&quot;: episodeCount,</span></span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">           3 :         &quot;air_date&quot;: airDate,</span></span>
 <span id="L41"><span class="lineNum">      41</span>              :       };</span>
 <span id="L42"><span class="lineNum">      42</span>              : </span>
-<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">           1 :   Season toEntity() {</span></span>
-<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">           1 :     return Season(</span></span>
-<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           1 :       id: id,</span></span>
-<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           1 :       name: name,</span></span>
-<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           1 :       overview: overview,</span></span>
-<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           1 :       posterPath: posterPath,</span></span>
-<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           1 :       seasonNumber: seasonNumber,</span></span>
-<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">           1 :       episodeCount: episodeCount,</span></span>
-<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">           1 :       airDate: airDate,</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">           2 :   Season toEntity() {</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">           2 :     return Season(</span></span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           2 :       id: id,</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           2 :       name: name,</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           2 :       overview: overview,</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           2 :       posterPath: posterPath,</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           2 :       seasonNumber: seasonNumber,</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">           2 :       episodeCount: episodeCount,</span></span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">           2 :       airDate: airDate,</span></span>
 <span id="L52"><span class="lineNum">      52</span>              :     );</span>
 <span id="L53"><span class="lineNum">      53</span>              :   }</span>
 <span id="L54"><span class="lineNum">      54</span>              : </span>

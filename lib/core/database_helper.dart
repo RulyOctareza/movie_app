@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../core/constants.dart';
@@ -23,14 +24,31 @@ class DatabaseHelper {
       final path = await getDatabasesPath();
       final databasePath = join(path, DBConstants.databaseName);
 
-      final db = await openDatabase(
-        databasePath,
-        version: DBConstants.databaseVersion,
-        onCreate: _onCreate,
-        onUpgrade: _onUpgrade,
-      );
-
-      return db;
+      try {
+        final db = await openDatabase(
+          databasePath,
+          version: DBConstants.databaseVersion,
+          onCreate: _onCreate,
+          onUpgrade: _onUpgrade,
+          onOpen: (db) async {
+            // Validate database integrity
+            try {
+              await db.query(DBConstants.watchlistTable, limit: 1);
+            } catch (e) {
+              await db.close();
+              throw Exception('Database validation failed: ${e.toString()}');
+            }
+          },
+        );
+        return db;
+      } catch (e) {
+        // If database is corrupted, delete it and try again
+        final dbFile = File(databasePath);
+        if (await dbFile.exists()) {
+          await dbFile.delete();
+        }
+        throw Exception('Failed to open database: ${e.toString()}');
+      }
     } catch (e) {
       throw Exception('Failed to initialize database: ${e.toString()}');
     }
@@ -52,20 +70,35 @@ class DatabaseHelper {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      // Add new columns for season information
-      await db.execute('''
-        ALTER TABLE ${DBConstants.watchlistTable}
-        ADD COLUMN number_of_seasons INTEGER;
-      ''');
-      await db.execute('''
-        ALTER TABLE ${DBConstants.watchlistTable}
-        ADD COLUMN number_of_episodes INTEGER;
-      ''');
-      await db.execute('''
-        ALTER TABLE ${DBConstants.watchlistTable}
-        ADD COLUMN seasons TEXT;
-      ''');
+    try {
+      if (oldVersion < 2) {
+        await db.transaction((txn) async {
+          // Add new columns for season information
+          await txn.execute('''
+            ALTER TABLE ${DBConstants.watchlistTable}
+            ADD COLUMN number_of_seasons INTEGER;
+          ''');
+          await txn.execute('''
+            ALTER TABLE ${DBConstants.watchlistTable}
+            ADD COLUMN number_of_episodes INTEGER;
+          ''');
+          await txn.execute('''
+            ALTER TABLE ${DBConstants.watchlistTable}
+            ADD COLUMN seasons TEXT;
+          ''');
+
+          // Validate data integrity
+          final result = await txn.query(DBConstants.watchlistTable);
+          for (final row in result) {
+            final vote = row['vote_average'];
+            if (vote != null && vote is! double && vote is! int) {
+              throw Exception('Invalid data found during upgrade');
+            }
+          }
+        });
+      }
+    } catch (e) {
+      throw Exception('Failed to upgrade database: ${e.toString()}');
     }
   }
 
