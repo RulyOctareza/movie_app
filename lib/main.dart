@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'TV Series App',
         theme: ThemeData.dark().copyWith(
           colorScheme: kColorScheme,
