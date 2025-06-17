@@ -70,35 +70,30 @@ class DatabaseHelper {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    try {
-      if (oldVersion < 2) {
-        await db.transaction((txn) async {
-          // Add new columns for season information
-          await txn.execute('''
-            ALTER TABLE ${DBConstants.watchlistTable}
-            ADD COLUMN number_of_seasons INTEGER;
-          ''');
-          await txn.execute('''
-            ALTER TABLE ${DBConstants.watchlistTable}
-            ADD COLUMN number_of_episodes INTEGER;
-          ''');
-          await txn.execute('''
-            ALTER TABLE ${DBConstants.watchlistTable}
-            ADD COLUMN seasons TEXT;
-          ''');
-
-          // Validate data integrity
-          final result = await txn.query(DBConstants.watchlistTable);
-          for (final row in result) {
-            final vote = row['vote_average'];
-            if (vote != null && vote is! double && vote is! int) {
-              throw Exception('Invalid data found during upgrade');
-            }
+    if (oldVersion < 2) {
+      // Simulate a data validation/migration step that could fail with invalid data.
+      if (oldVersion == 1) {
+        // This check is specific to the upgrade path from v1 to v2.
+        final List<Map<String, dynamic>> oldWatchlist =
+            await db.query(DBConstants.watchlistTable);
+        for (var item in oldWatchlist) {
+          final voteAverage = item['vote_average'];
+          // If vote_average is not null and not a number, it's problematic for this hypothetical validation.
+          if (voteAverage != null && voteAverage is! num) {
+            // This error will be caught by _initDb's try-catch block.
+            throw StateError(
+                'Upgrade from v1 to v2 failed: Invalid data type for vote_average. Expected num, got ${voteAverage.runtimeType} for value "$voteAverage".');
           }
-        });
+        }
       }
-    } catch (e) {
-      throw Exception('Failed to upgrade database: ${e.toString()}');
+
+      // Proceed with schema changes if validation passed or wasn't applicable
+      await db.execute(
+          'ALTER TABLE ${DBConstants.watchlistTable} ADD COLUMN number_of_seasons INTEGER;');
+      await db.execute(
+          'ALTER TABLE ${DBConstants.watchlistTable} ADD COLUMN number_of_episodes INTEGER;');
+      await db.execute(
+          'ALTER TABLE ${DBConstants.watchlistTable} ADD COLUMN seasons TEXT;');
     }
   }
 
@@ -107,7 +102,7 @@ class DatabaseHelper {
     if (db != null) {
       await db.close();
       _database = null;
-      _instance = null; // Clear instance so a new one will be created
+      _instance = null;
     }
   }
 }

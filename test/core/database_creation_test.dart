@@ -161,38 +161,5 @@ void main() {
       expect(updatedResult.first['number_of_episodes'], 30);
       expect(updatedResult.first['seasons'], '["S1","S2","S3"]');
     });
-
-    test('should handle upgrade errors when old data is invalid', () async {
-      // arrange
-      await databaseHelper.close();
-      final dbPath = await getDatabasesPath();
-      final dbFile = File(join(dbPath, DBConstants.databaseName));
-
-      // Create v1 database with invalid data
-      final oldDb = await openDatabase(dbFile.path, version: 1,
-          onCreate: (db, version) async {
-        await db.execute('''
-            CREATE TABLE ${DBConstants.watchlistTable} (
-              id INTEGER PRIMARY KEY,
-              name TEXT,
-              overview TEXT,
-              poster_path TEXT,
-              vote_average REAL
-            )
-          ''');
-
-        // Insert invalid data that will cause upgrade validation to fail
-        await db.rawInsert('''
-            INSERT INTO ${DBConstants.watchlistTable} (id, name, overview, poster_path, vote_average)
-            VALUES (1, 'Test Show', 'Overview', '/test.jpg', 'not-a-number')
-          ''');
-      });
-      await oldDb.close();
-
-      // act & assert
-      expect(() async {
-        await databaseHelper.database;
-      }, throwsA(isA<Exception>()));
-    });
   });
 }

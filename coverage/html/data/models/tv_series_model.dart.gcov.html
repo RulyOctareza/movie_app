@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2025-06-16 13:18:42</td>
+            <td class="headerValue">2025-06-17 16:44:00</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">-</td>
@@ -96,7 +96,7 @@
 <span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           3 :         numberOfSeasons: json[&quot;number_of_seasons&quot;],</span></span>
 <span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">           3 :         numberOfEpisodes: json[&quot;number_of_episodes&quot;],</span></span>
 <span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">           3 :         seasons: json[&quot;seasons&quot;] != null</span></span>
-<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">           6 :             ? (json[&quot;seasons&quot;] is String </span></span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">           6 :             ? (json[&quot;seasons&quot;] is String</span></span>
 <span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">           6 :                 ? (jsonDecode(json[&quot;seasons&quot;]) as List)</span></span>
 <span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">           9 :                     .map((x) =&gt; SeasonModel.fromJson(x))</span></span>
 <span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">           3 :                     .toList()</span></span>

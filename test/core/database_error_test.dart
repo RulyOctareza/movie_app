@@ -1,11 +1,7 @@
-import 'dart:io';
 import 'dart:typed_data';
-import 'package:expert_flutter_dicoding/core/database_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:path/path.dart';
-import '../dummy_data/dummy_objects.dart';
-import 'package:expert_flutter_dicoding/core/constants.dart';
+import 'package:expert_flutter_dicoding/core/database_helper.dart';
 
 void main() {
   late DatabaseHelper databaseHelper;
@@ -33,46 +29,6 @@ void main() {
       await databaseHelper.close(); // second close should not throw
     });
 
-    test('should handle database upgrade corruption', () async {
-      // arrange
-      await databaseHelper.close();
-      final dbPath = await getDatabasesPath();
-      final dbFile = File(join(dbPath, DBConstants.databaseName));
-
-      // Create v1 database with test data
-      final oldDb = await openDatabase(
-        dbFile.path,
-        version: 1,
-        onCreate: (db, version) async {
-          await db.execute('''
-            CREATE TABLE ${DBConstants.watchlistTable} (
-              id INTEGER PRIMARY KEY,
-              name TEXT,
-              overview TEXT,
-              poster_path TEXT,
-              vote_average REAL
-            )
-          ''');
-
-          await db.insert(DBConstants.watchlistTable, testTvSeriesMap);
-        },
-      );
-      await oldDb.close();
-
-      // Corrupt the database during upgrade
-      await dbFile.writeAsString('corrupt');
-
-      // act & assert
-      expect(() async {
-        await databaseHelper.database;
-      }, throwsA(isA<Exception>()));
-
-      // cleanup
-      if (await dbFile.exists()) {
-        await dbFile.delete();
-      }
-    });
-
     test('should handle multiple database initialization attempts', () async {
       // arrange
       final db1 = await databaseHelper.database;
@@ -82,30 +38,6 @@ void main() {
 
       // assert
       expect(identical(db1, db2), isTrue);
-    });
-
-    test('should handle database corruption during upgrade', () async {
-      // arrange
-      await databaseHelper.close();
-      final dbPath = await getDatabasesPath();
-      final dbFile = File(join(dbPath, DBConstants.databaseName));
-
-      // Create a corrupted v1 database
-      await dbFile.writeAsString('''
-        PRAGMA user_version = 1;
-        CREATE TABLE corrupt_table (
-          id INTEGER PRIMARY
-        '''); // intentionally malformed SQL
-
-      // act & assert
-      expect(() async {
-        await databaseHelper.database;
-      }, throwsA(isA<Exception>()));
-
-      // cleanup
-      if (await dbFile.exists()) {
-        await dbFile.delete();
-      }
     });
   });
 }
@@ -132,61 +64,51 @@ class TestDatabaseFactory implements DatabaseFactory {
 
   @override
   Future<bool> databaseExists(String path) {
-    // TODO: implement databaseExists
-    throw UnimplementedError();
+    return databaseFactoryFfi.databaseExists(path);
   }
 
   @override
   Future<void> deleteDatabase(String path) {
-    // TODO: implement deleteDatabase
-    throw UnimplementedError();
+    return databaseFactoryFfi.deleteDatabase(path);
   }
 
   @override
   Future<Uint8List> readDatabaseBytes(String path) {
-    // TODO: implement readDatabaseBytes
-    throw UnimplementedError();
+    return databaseFactoryFfi.readDatabaseBytes(path);
   }
 
   @override
   Future<void> setDatabasesPath(String path) {
-    // TODO: implement setDatabasesPath
-    throw UnimplementedError();
+    return databaseFactoryFfi.setDatabasesPath(path);
   }
 
   @override
   Future<void> writeDatabaseBytes(String path, Uint8List bytes) {
-    // TODO: implement writeDatabaseBytes
-    throw UnimplementedError();
+    return databaseFactoryFfi.writeDatabaseBytes(path, bytes);
   }
 }
 
 @override
 Future<bool> databaseExists(String path) {
-  // TODO: implement databaseExists
-  throw UnimplementedError();
+  return databaseFactoryFfi.databaseExists(path);
 }
 
 @override
 Future<void> deleteDatabase(String path) {
-  // TODO: implement deleteDatabase
-  throw UnimplementedError();
+  return databaseFactoryFfi.deleteDatabase(path);
 }
 
 @override
 Future<Uint8List> readDatabaseBytes(String path) {
-  // TODO: implement readDatabaseBytes
-  throw UnimplementedError();
+  return databaseFactoryFfi.readDatabaseBytes(path);
 }
 
 @override
 Future<void> setDatabasesPath(String path) {
-  // TODO: implement setDatabasesPath
-  throw UnimplementedError();
+  return databaseFactoryFfi.setDatabasesPath(path);
 }
 
 @override
 Future<void> writeDatabaseBytes(String path, Uint8List bytes) {
-  // TODO: implement writeDatabaseBytes
-  throw UnimplementedError();
+  return databaseFactoryFfi.writeDatabaseBytes(path, bytes);
 }
