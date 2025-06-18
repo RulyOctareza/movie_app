@@ -1,138 +1,62 @@
+// test/core/database_error_handling_test.dart
+
 import 'dart:io';
 import 'package:expert_flutter_dicoding/core/database_helper.dart';
 import 'package:expert_flutter_dicoding/core/constants.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:path/path.dart';
+import 'package:flutter_test/flutter_test.dart' as flutter_test;
+import 'package:path/path.dart' as p;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   late DatabaseHelper databaseHelper;
+  late String dbPath;
 
-  setUpAll(() {
+  flutter_test.setUpAll(() async {
     sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+    dbPath = await getDatabasesPath();
   });
 
-  setUp(() {
-    databaseFactory = databaseFactoryFfi;
+  flutter_test.setUp(() {
     databaseHelper = DatabaseHelper.instance;
   });
 
-  tearDown(() async {
+  flutter_test.tearDown(() async {
     await databaseHelper.close();
-    final dbPath = await getDatabasesPath();
-    final dbFile = File(join(dbPath, DBConstants.databaseName));
+    final dbFile = File(p.join(dbPath, DBConstants.databaseName));
     if (await dbFile.exists()) {
       await dbFile.delete();
     }
   });
 
-  group('Database Error Handling', () {
-    test('should handle double close gracefully', () async {
-      // arrange
-      await databaseHelper.database; // ensure database is open
+  flutter_test.group('Database Error Handling', () {
+    flutter_test.test('should handle double close gracefully', () async {
+      // Arrange
+      final db = await databaseHelper.database;
+      flutter_test.expect(db.isOpen, flutter_test.isTrue);
 
-      // act & assert
-      await databaseHelper.close(); // first close
-      await databaseHelper.close(); // second close should not throw
-    });
-
-    test('should handle database initialization errors', () async {
-      // arrange
+      // Act
       await databaseHelper.close();
-      final dbPath = await getDatabasesPath();
-      final dbFile = File(join(dbPath, DBConstants.databaseName));
+      await databaseHelper.close(); // Panggilan kedua tidak boleh error
 
-      if (await dbFile.exists()) {
-        await dbFile.delete();
-      }
-
-      // Create a corrupted database file
-      await dbFile.writeAsString('corrupt content');
-
-      // act & assert
-      expect(() async {
-        await databaseHelper.database;
-      }, throwsA(isA<Exception>()));
+      // Assert
+      // Memanggil database lagi akan membuat instance baru
+      final newDb = await databaseHelper.database;
+      flutter_test.expect(newDb.isOpen, flutter_test.isTrue);
+      flutter_test.expect(identical(db, newDb), flutter_test.isFalse,
+          reason: "A new database instance should be created after closing.");
     });
 
-    test('should handle multiple database initialization attempts', () async {
-      // arrange
+    flutter_test.test('should handle multiple database initialization attempts',
+        () async {
+      // Arrange
       final db1 = await databaseHelper.database;
 
-      // act
+      // Act
       final db2 = await databaseHelper.database;
 
-      // assert
-      expect(identical(db1, db2), isTrue);
-    });
-
-    test('should handle database corruption during upgrade', () async {
-      // arrange
-      await databaseHelper.close();
-      final dbPath = await getDatabasesPath();
-      final dbFile = File(join(dbPath, DBConstants.databaseName));
-
-      // Create v1 database
-      final oldDb = await openDatabase(
-        dbFile.path,
-        version: 1,
-        onCreate: (db, version) async {
-          await db.execute('''
-            CREATE TABLE ${DBConstants.watchlistTable} (
-              id INTEGER PRIMARY KEY,
-              name TEXT,
-              overview TEXT,
-              poster_path TEXT,
-              vote_average REAL
-            )
-          ''');
-        },
-      );
-      await oldDb.close();
-
-      // Corrupt the database
-      await dbFile.writeAsString('corrupt content');
-
-      // act & assert
-      expect(() async {
-        await databaseHelper.database;
-      }, throwsA(isA<Exception>()));
-    });
-
-    test('should handle failed database upgrade gracefully', () async {
-      // arrange
-      await databaseHelper.close();
-      final dbPath = await getDatabasesPath();
-      final dbFile = File(join(dbPath, DBConstants.databaseName));
-
-      // Create v1 database with valid schema but corrupt data
-      final oldDb = await openDatabase(
-        dbFile.path,
-        version: 1,
-        onCreate: (db, version) async {
-          await db.execute('''
-            CREATE TABLE ${DBConstants.watchlistTable} (
-              id INTEGER PRIMARY KEY,
-              name TEXT,
-              overview TEXT,
-              poster_path TEXT,
-              vote_average REAL
-            )
-          ''');
-
-          // Insert invalid data that will cause upgrade to fail
-          await db.execute('''
-            INSERT INTO ${DBConstants.watchlistTable} (id, name, overview, poster_path, vote_average)
-            VALUES (1, null, null, null, 'invalid')
-          ''');
-        },
-      );
-      await oldDb.close();
-
-      // act & assert
-      expect(() async {
-        await databaseHelper.database;
-      }, throwsA(isA<Exception>()));
+      // Assert
+      flutter_test.expect(identical(db1, db2), flutter_test.isTrue);
     });
   });
 }

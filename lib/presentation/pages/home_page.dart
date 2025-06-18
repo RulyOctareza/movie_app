@@ -1,6 +1,9 @@
+import 'package:expert_flutter_dicoding/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/movie_list_notifier.dart';
 import '../providers/tv_series_list_notifier.dart';
+import '../widgets/movie_list.dart';
 import '../widgets/tv_series_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,11 +13,20 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
     Future.microtask(() {
+      // Initialize both movie and TV series data
+      Provider.of<MovieListNotifier>(context, listen: false)
+        ..fetchNowPlayingMovies()
+        ..fetchPopularMovies()
+        ..fetchTopRatedMovies();
       Provider.of<TvSeriesListNotifier>(context, listen: false)
         ..fetchNowPlayingTvSeries()
         ..fetchPopularTvSeries()
@@ -23,10 +35,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TV Series'),
+        title: const Text('Ditonton'),
         actions: [
           IconButton(
             onPressed: () {
@@ -41,69 +59,80 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.bookmark),
           ),
         ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Now Playing',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              Consumer<TvSeriesListNotifier>(
-                builder: (context, data, child) {
-                  if (data.nowPlayingState == RequestState.Loading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (data.nowPlayingState == RequestState.Loaded) {
-                    return TvSeriesList(data.nowPlayingTvSeries);
-                  } else {
-                    return const Text('Failed');
-                  }
-                },
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Popular',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              Consumer<TvSeriesListNotifier>(
-                builder: (context, data, child) {
-                  if (data.popularState == RequestState.Loading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (data.popularState == RequestState.Loaded) {
-                    return TvSeriesList(data.popularTvSeries);
-                  } else {
-                    return const Text('Failed');
-                  }
-                },
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Top Rated',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              Consumer<TvSeriesListNotifier>(
-                builder: (context, data, child) {
-                  if (data.topRatedState == RequestState.Loading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (data.topRatedState == RequestState.Loaded) {
-                    return TvSeriesList(data.topRatedTvSeries);
-                  } else {
-                    return const Text('Failed');
-                  }
-                },
-              ),
-            ],
-          ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(
+              text: 'Movies',
+              icon: Icon(Icons.movie),
+            ),
+            Tab(
+              text: 'TV Series',
+              icon: Icon(Icons.tv),
+            ),
+          ],
         ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          // Movies Tab
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Now Playing',
+                    style: kHeading6,
+                  ),
+                  const NowPlayingMovieList(),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Popular',
+                    style: kHeading6,
+                  ),
+                  const PopularMovieList(),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Top Rated',
+                    style: kHeading6,
+                  ),
+                  const TopRatedMovieList(),
+                ],
+              ),
+            ),
+          ),
+          // TV Series Tab
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Now Playing',
+                    style: kHeading6,
+                  ),
+                  const NowPlayingTvSeriesList(),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Popular',
+                    style: kHeading6,
+                  ),
+                  const PopularTvSeriesList(),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Top Rated',
+                    style: kHeading6,
+                  ),
+                  const TopRatedTvSeriesList(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

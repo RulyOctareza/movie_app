@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:expert_flutter_dicoding/core/failure.dart';
+import 'package:expert_flutter_dicoding/core/state_enum.dart';
 import 'package:expert_flutter_dicoding/domain/entities/tv_series.dart';
 import 'package:expert_flutter_dicoding/domain/usecases/get_watchlist_tv_series.dart';
 import 'package:expert_flutter_dicoding/presentation/providers/watchlist_tv_series_notifier.dart';

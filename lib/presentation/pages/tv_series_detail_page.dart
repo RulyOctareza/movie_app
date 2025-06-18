@@ -3,7 +3,7 @@ import 'package:expert_flutter_dicoding/core/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/constants.dart';
+import '../../core/constants.dart' hide kTextTheme, kRichBlack;
 import '../../domain/entities/tv_series.dart';
 import '../providers/tv_series_detail_notifier.dart';
 
