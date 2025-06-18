@@ -19,7 +19,6 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
     try {
       await databaseHelper.insertMovieWatchlist(movie.toJson());
       return 'Added to Watchlist';
-
     } catch (e) {
       throw DatabaseException(e.toString());
     }

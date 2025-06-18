@@ -84,10 +84,8 @@ class MovieRepositoryImpl implements MovieRepository {
       final result =
           await localDataSource.insertWatchlist(MovieModel.fromEntity(movie));
       return Right(result);
-    } on DatabaseException catch (e) {
-      return Left(DatabaseFailure(e.message));
     } catch (e) {
-      rethrow;
+      return Left(DatabaseFailure(e.toString()));
     }
   }
 
@@ -97,8 +95,8 @@ class MovieRepositoryImpl implements MovieRepository {
       final result =
           await localDataSource.removeWatchlist(MovieModel.fromEntity(movie));
       return Right(result);
-    } on DatabaseException catch (e) {
-      return Left(DatabaseFailure(e.message));
+    } catch (e) {
+      return Left(DatabaseFailure(e.toString()));
     }
   }
 
@@ -110,11 +108,7 @@ class MovieRepositoryImpl implements MovieRepository {
 
   @override
   Future<Either<Failure, List<Movie>>> getWatchlistMovies() async {
-    try {
-      final result = await localDataSource.getWatchlistMovies();
-      return Right(result.map((data) => data.toEntity()).toList());
-    } on DatabaseException catch (e) {
-      return Left(DatabaseFailure(e.message));
-    }
+    final result = await localDataSource.getWatchlistMovies();
+    return Right(result.map((data) => data.toEntity()).toList());
   }
 }

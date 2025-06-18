@@ -2,6 +2,7 @@ import 'package:expert_flutter_dicoding/presentation/pages/movie_detail_page.dar
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/styles.dart';
+import 'core/utils.dart';
 import 'injection.dart' as di;
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/search_page.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
           textTheme: kTextTheme,
         ),
         home: const HomePage(),
+        navigatorObservers: [routeObserver],
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case '/home':

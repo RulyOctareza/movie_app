@@ -1,6 +1,9 @@
+import 'package:expert_flutter_dicoding/core/state_enum.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/utils.dart';
 import '../providers/watchlist_movie_notifier.dart';
 import '../providers/watchlist_tv_series_notifier.dart';
 import '../widgets/movie_card.dart';
@@ -14,7 +17,7 @@ class WatchlistPage extends StatefulWidget {
 }
 
 class _WatchlistPageState extends State<WatchlistPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, RouteAware {
   late TabController _tabController;
 
   @override
@@ -31,7 +34,22 @@ class _WatchlistPageState extends State<WatchlistPage>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void didPopNext() {
+    Provider.of<WatchlistMovieNotifier>(context, listen: false)
+        .fetchWatchlistMovies();
+    Provider.of<WatchlistTvSeriesNotifier>(context, listen: false)
+        .fetchWatchlistTvSeries();
+  }
+
+  @override
   void dispose() {
+    routeObserver.unsubscribe(this);
     _tabController.dispose();
     super.dispose();
   }
@@ -57,30 +75,37 @@ class _WatchlistPageState extends State<WatchlistPage>
             padding: const EdgeInsets.all(8.0),
             child: Consumer<WatchlistMovieNotifier>(
               builder: (context, data, child) {
-                if (data.watchlistState == RequestState.loading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (data.watchlistState == RequestState.error) {
-                  return Center(
-                    key: const Key('error_message'),
-                    child: Text(data.message),
-                  );
-                } else if (data.watchlistState == RequestState.loaded) {
-                  if (data.watchlistMovies.isEmpty) {
+                if (kDebugMode) {
+                  print('Watchlist Movie State: ${data.watchlistState}');
+                  print(
+                      'Watchlist Movie Count: ${data.watchlistMovies.length}');
+                }
+
+                final watchlistState = data.watchlistState;
+                if (watchlistState == RequestState.loaded) {
+                  final movies = data.watchlistMovies;
+                  if (movies.isEmpty) {
                     return const Center(
-                      child: Text('No watchlist movies added yet'),
+                      child: CircularProgressIndicator(),
                     );
                   }
                   return ListView.builder(
                     itemBuilder: (context, index) {
-                      final movie = data.watchlistMovies[index];
+                      final movie = movies[index];
                       return MovieCard(movie);
                     },
-                    itemCount: data.watchlistMovies.length,
+                    itemCount: movies.length,
+                  );
+                } else if (watchlistState == RequestState.loading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (watchlistState == RequestState.error) {
+                  return Center(
+                    key: const Key('error_message'),
+                    child: Text(data.message),
                   );
                 } else {
-                  // For the empty state or any other unexpected state
                   return const Center(
                     child: Text('No watchlist movies added yet'),
                   );

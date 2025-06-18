@@ -184,7 +184,7 @@ class DetailContent extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
           child: CircleAvatar(
             backgroundColor: kRichBlack,
             foregroundColor: Colors.white,
