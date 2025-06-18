@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../core/constants.dart';
+import '../data/models/movie_model.dart';
+import '../data/models/tv_series_model.dart';
 
 class DatabaseHelper {
   static DatabaseHelper? _instance;
@@ -14,87 +16,170 @@ class DatabaseHelper {
     return _instance!;
   }
 
+  // For dependency injection support
+  factory DatabaseHelper() => instance;
+
   Future<Database> get database async {
     _database ??= await _initDb();
     return _database!;
   }
 
+  Future<String> getDbPath() async {
+    final path = await getDatabasesPath();
+    return join(path, DBConstants.databaseName);
+  }
+
   Future<Database> _initDb() async {
     try {
-      final path = await getDatabasesPath();
-      final databasePath = join(path, DBConstants.databaseName);
+      final databasePath = await getDbPath();
+      final dbFile = File(databasePath);
 
-      try {
-        final db = await openDatabase(
-          databasePath,
-          version: DBConstants.databaseVersion,
-          onCreate: _onCreate,
-          onUpgrade: _onUpgrade,
-          onOpen: (db) async {
-            // Validate database integrity
-            try {
-              await db.query(DBConstants.watchlistTable, limit: 1);
-            } catch (e) {
-              await db.close();
-              throw Exception('Database validation failed: ${e.toString()}');
-            }
-          },
-        );
-        return db;
-      } catch (e) {
-        // If database is corrupted, delete it and try again
-        final dbFile = File(databasePath);
-        if (await dbFile.exists()) {
+      // Check if database file exists and delete it if it's corrupted
+      if (await dbFile.exists()) {
+        try {
+          // Try to open the database to check if it's valid
+          final testDb = await openDatabase(
+            databasePath,
+            readOnly: true,
+          );
+          await testDb.close();
+        } catch (e) {
+          // Database is corrupted, delete it
           await dbFile.delete();
         }
-        throw Exception('Failed to open database: ${e.toString()}');
       }
+
+      // Create or open the database
+      final db = await openDatabase(
+        databasePath,
+        version: DBConstants.databaseVersion,
+        onCreate: _onCreate,
+        onUpgrade: _onUpgrade,
+      );
+
+      return db;
     } catch (e) {
       throw Exception('Failed to initialize database: ${e.toString()}');
     }
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE ${DBConstants.watchlistTable} (
-        id INTEGER PRIMARY KEY,
-        name TEXT,
-        overview TEXT,
-        poster_path TEXT,
-        vote_average REAL,
-        number_of_seasons INTEGER,
-        number_of_episodes INTEGER,
-        seasons TEXT
-      );
-    ''');
+    // Create movies watchlist table
+    await db.execute(DBConstants.tableMovieWatchlistCreateQuery);
+
+    // Create TV series watchlist table
+    await db.execute(DBConstants.tableTvSeriesWatchlistCreateQuery);
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      // Simulate a data validation/migration step that could fail with invalid data.
-      if (oldVersion == 1) {
-        // This check is specific to the upgrade path from v1 to v2.
-        final List<Map<String, dynamic>> oldWatchlist =
-            await db.query(DBConstants.watchlistTable);
-        for (var item in oldWatchlist) {
-          final voteAverage = item['vote_average'];
-          // If vote_average is not null and not a number, it's problematic for this hypothetical validation.
-          if (voteAverage != null && voteAverage is! num) {
-            // This error will be caught by _initDb's try-catch block.
-            throw StateError(
-                'Upgrade from v1 to v2 failed: Invalid data type for vote_average. Expected num, got ${voteAverage.runtimeType} for value "$voteAverage".');
-          }
+      // Create the new tables with the correct schema
+      await _onCreate(db, newVersion);
+
+      // Migrate data from the old watchlist table to the new tables
+      final oldData = await db.query(DBConstants.watchlistTable);
+      for (var item in oldData) {
+        if (item['isMovie'] == 1) {
+          await db.insert(DBConstants.watchlistMoviesTable, {
+            'id': item['id'],
+            'title': item['title'],
+            'overview': item['overview'],
+            'poster_path': item['poster_path'],
+            'vote_average': item['vote_average'],
+          });
+        } else {
+          await db.insert(DBConstants.watchlistTvSeriesTable, {
+            'id': item['id'],
+            'name': item['name'],
+            'overview': item['overview'],
+            'poster_path': item['poster_path'],
+            'vote_average': item['vote_average'],
+            'number_of_seasons': item['number_of_seasons'],
+            'number_of_episodes': item['number_of_episodes'],
+            'seasons': item['seasons'],
+          });
         }
       }
 
-      // Proceed with schema changes if validation passed or wasn't applicable
-      await db.execute(
-          'ALTER TABLE ${DBConstants.watchlistTable} ADD COLUMN number_of_seasons INTEGER;');
-      await db.execute(
-          'ALTER TABLE ${DBConstants.watchlistTable} ADD COLUMN number_of_episodes INTEGER;');
-      await db.execute(
-          'ALTER TABLE ${DBConstants.watchlistTable} ADD COLUMN seasons TEXT;');
+      // Drop the old table
+      await db.execute('DROP TABLE IF EXISTS ${DBConstants.watchlistTable}');
     }
+  }
+
+  Future<int> insertMovieWatchlist(Map<String, dynamic> movie) async {
+    final db = await database;
+    return await db.insert(DBConstants.watchlistMoviesTable, movie);
+  }
+
+  Future<int> insertTvSeriesWatchlist(Map<String, dynamic> tvSeries) async {
+    final db = await database;
+    return await db.insert(DBConstants.watchlistTvSeriesTable, tvSeries);
+  }
+
+  Future<int> removeMovieWatchlist(int id) async {
+    final db = await database;
+    return await db.delete(
+      DBConstants.watchlistMoviesTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> removeTvSeriesWatchlist(int id) async {
+    final db = await database;
+    return await db.delete(
+      DBConstants.watchlistTvSeriesTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<Map<String, dynamic>?> getMovieById(int id) async {
+    final db = await database;
+    final results = await db.query(
+      DBConstants.watchlistMoviesTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first;
+    }
+
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getTvSeriesById(int id) async {
+    final db = await database;
+    final results = await db.query(
+      DBConstants.watchlistTvSeriesTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first;
+    }
+
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>> getWatchlistMovies() async {
+    final db = await database;
+    try {
+      final List<Map<String, dynamic>> results =
+          await db.query(DBConstants.watchlistMoviesTable);
+      return results;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getWatchlistTvSeries() async {
+    final db = await database;
+    final List<Map<String, dynamic>> results =
+        await db.query(DBConstants.watchlistTvSeriesTable);
+    return results;
   }
 
   Future<void> close() async {
@@ -102,7 +187,6 @@ class DatabaseHelper {
     if (db != null) {
       await db.close();
       _database = null;
-      _instance = null;
     }
   }
 }

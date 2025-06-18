@@ -1,3 +1,4 @@
+import 'package:expert_flutter_dicoding/presentation/pages/movie_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/styles.dart';
@@ -10,6 +11,10 @@ import 'presentation/providers/tv_series_list_notifier.dart';
 import 'presentation/providers/tv_series_search_notifier.dart';
 import 'presentation/providers/tv_series_detail_notifier.dart';
 import 'presentation/providers/watchlist_tv_series_notifier.dart';
+import 'presentation/providers/movie_list_notifier.dart';
+import 'presentation/providers/movie_detail_notifier.dart';
+import 'presentation/providers/movie_search_notifier.dart';
+import 'presentation/providers/watchlist_movie_notifier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +29,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        // Movie providers
+        ChangeNotifierProvider(
+          create: (_) => di.locator<MovieListNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<MovieDetailNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<MovieSearchNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<WatchlistMovieNotifier>(),
+        ),
+        // TV Series providers
         ChangeNotifierProvider(
           create: (_) => di.locator<TvSeriesListNotifier>(),
         ),
@@ -39,7 +58,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'TV Series App',
+        title: 'Movie & TV Series App',
         theme: ThemeData.dark().copyWith(
           colorScheme: kColorScheme,
           primaryColor: kRichBlack,
@@ -53,7 +72,13 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => const HomePage());
             case '/search':
               return MaterialPageRoute(builder: (_) => const SearchPage());
-            case '/detail':
+            case '/detail-movie':
+              final id = settings.arguments as int;
+              return MaterialPageRoute(
+                builder: (_) => MovieDetailPage(id: id),
+                settings: settings,
+              );
+            case '/detail-tv':
               final id = settings.arguments as int;
               return MaterialPageRoute(
                 builder: (_) => TvSeriesDetailPage(id: id),
