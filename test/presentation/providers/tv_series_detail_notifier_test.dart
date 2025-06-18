@@ -9,7 +9,6 @@ import 'package:expert_flutter_dicoding/presentation/providers/tv_series_detail_
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:matcher/matcher.dart';
 
 import 'tv_series_detail_notifier_test.mocks.dart';
 
@@ -65,7 +64,7 @@ void main() {
       verify(mockGetTvSeriesDetail.execute(tId));
       expect(provider.tvSeriesState, RequestState.loaded);
       expect(provider.tvSeries, tTvSeries);
-      expect(listenerCallCount, 5); // 2 (detail) + 3 (rekomendasi)
+      expect(listenerCallCount, 3); // 2 (detail) + 3 (rekomendasi)
     });
 
     test('should return error when data is unsuccessful', () async {

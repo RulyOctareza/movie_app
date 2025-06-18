@@ -66,6 +66,8 @@ void main() {
       when(mockNotifier.tvSeriesState).thenReturn(RequestState.loaded);
       when(mockNotifier.tvSeries).thenReturn(testTvSeries);
       when(mockNotifier.isAddedToWatchlist).thenReturn(false);
+      when(mockNotifier.recommendationState).thenReturn(RequestState.loaded);
+      when(mockNotifier.tvSeriesRecommendations).thenReturn([]);
 
       await tester
           .pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
