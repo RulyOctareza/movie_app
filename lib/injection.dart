@@ -31,6 +31,7 @@ import 'domain/usecases/get_top_rated_tv_series.dart';
 import 'domain/usecases/get_tv_series_detail.dart';
 import 'domain/usecases/get_watchlist_tv_series.dart';
 import 'domain/usecases/search_tv_series.dart';
+import 'domain/usecases/get_tv_series_recommendations.dart';
 import 'presentation/providers/tv_series_list_notifier.dart';
 import 'presentation/providers/tv_series_detail_notifier.dart';
 import 'presentation/providers/tv_series_search_notifier.dart';
@@ -91,8 +92,9 @@ Future<void> init() async {
   locator.registerLazySingleton(() => GetPopularTvSeries(locator()));
   locator.registerLazySingleton(() => GetTopRatedTvSeries(locator()));
   locator.registerLazySingleton(() => GetTvSeriesDetail(locator()));
-  locator.registerLazySingleton(() => SearchTvSeries(locator()));
   locator.registerLazySingleton(() => GetWatchlistTvSeries(locator()));
+  locator.registerLazySingleton(() => SearchTvSeries(locator()));
+  locator.registerLazySingleton(() => GetTvSeriesRecommendations(locator()));
 
   // Providers - Movies
   locator.registerFactory(
@@ -133,6 +135,7 @@ Future<void> init() async {
     () => TvSeriesDetailNotifier(
       getTvSeriesDetail: locator(),
       getWatchlistTvSeries: locator(),
+      getTvSeriesRecommendations: locator(),
     ),
   );
   locator.registerFactory(

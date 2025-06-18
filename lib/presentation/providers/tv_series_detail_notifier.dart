@@ -1,16 +1,20 @@
+import 'package:expert_flutter_dicoding/core/state_enum.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/tv_series.dart';
 import '../../domain/usecases/get_tv_series_detail.dart';
 import '../../domain/usecases/get_watchlist_tv_series.dart';
+import '../../domain/usecases/get_tv_series_recommendations.dart';
 
 class TvSeriesDetailNotifier extends ChangeNotifier {
   final GetTvSeriesDetail getTvSeriesDetail;
   final GetWatchlistTvSeries getWatchlistTvSeries;
+  final GetTvSeriesRecommendations getTvSeriesRecommendations;
 
   TvSeriesDetailNotifier({
     required this.getTvSeriesDetail,
     required this.getWatchlistTvSeries,
+    required this.getTvSeriesRecommendations,
   });
 
   late TvSeries _tvSeries;
@@ -28,6 +32,12 @@ class TvSeriesDetailNotifier extends ChangeNotifier {
   String _watchlistMessage = '';
   String get watchlistMessage => _watchlistMessage;
 
+  List<TvSeries> _tvSeriesRecommendations = [];
+  List<TvSeries> get tvSeriesRecommendations => _tvSeriesRecommendations;
+
+  RequestState _recommendationState = RequestState.empty;
+  RequestState get recommendationState => _recommendationState;
+
   Future<void> fetchTvSeriesDetail(int id) async {
     _tvSeriesState = RequestState.loading;
     notifyListeners();
@@ -40,10 +50,27 @@ class TvSeriesDetailNotifier extends ChangeNotifier {
         _message = failure.message;
         notifyListeners();
       },
-      (tvSeries) {
+      (tvSeries) async {
         _tvSeriesState = RequestState.loaded;
         _tvSeries = tvSeries;
         notifyListeners();
+
+        // Fetch recommendations
+        _recommendationState = RequestState.loading;
+        notifyListeners();
+        final recommendationResult = await getTvSeriesRecommendations.execute(id);
+        recommendationResult.fold(
+          (failure) {
+            _recommendationState = RequestState.error;
+            _tvSeriesRecommendations = [];
+            notifyListeners();
+          },
+          (recommendations) {
+            _recommendationState = RequestState.loaded;
+            _tvSeriesRecommendations = recommendations;
+            notifyListeners();
+          },
+        );
       },
     );
   }
@@ -85,4 +112,3 @@ class TvSeriesDetailNotifier extends ChangeNotifier {
   }
 }
 
-enum RequestState { empty, loading, loaded, error }

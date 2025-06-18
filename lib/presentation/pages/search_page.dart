@@ -1,8 +1,10 @@
+import 'package:expert_flutter_dicoding/core/state_enum.dart';
+import 'package:expert_flutter_dicoding/presentation/providers/tv_series_search_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/movie_search_notifier.dart';
-import '../providers/tv_series_search_notifier.dart';
+
 import '../widgets/movie_card.dart';
 import '../widgets/tv_series_card.dart';
 
