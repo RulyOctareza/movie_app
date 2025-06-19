@@ -1,3 +1,4 @@
+import 'package:expert_flutter_dicoding/core/state_enum.dart';
 import 'package:expert_flutter_dicoding/domain/entities/tv_series.dart';
 import 'package:expert_flutter_dicoding/presentation/pages/tv_series_detail_page.dart';
 import 'package:expert_flutter_dicoding/presentation/providers/tv_series_detail_notifier.dart';
@@ -65,6 +66,8 @@ void main() {
       when(mockNotifier.tvSeriesState).thenReturn(RequestState.loaded);
       when(mockNotifier.tvSeries).thenReturn(testTvSeries);
       when(mockNotifier.isAddedToWatchlist).thenReturn(false);
+      when(mockNotifier.recommendationState).thenReturn(RequestState.loaded);
+      when(mockNotifier.tvSeriesRecommendations).thenReturn([]);
 
       await tester
           .pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));

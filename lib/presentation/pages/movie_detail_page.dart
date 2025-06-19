@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:expert_flutter_dicoding/core/state_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +7,6 @@ import '../../core/constants.dart' hide kRichBlack, kTextTheme;
 import '../../core/styles.dart';
 import '../../domain/entities/movie.dart';
 import '../providers/movie_detail_notifier.dart';
-import '../../core/state_enum.dart';
 
 class MovieDetailPage extends StatefulWidget {
   static const routeName = '/detail-movie';

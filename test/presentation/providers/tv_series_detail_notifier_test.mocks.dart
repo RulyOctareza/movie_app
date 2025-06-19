@@ -12,6 +12,8 @@ import 'package:expert_flutter_dicoding/domain/repositories/tv_series_repository
     as _i2;
 import 'package:expert_flutter_dicoding/domain/usecases/get_tv_series_detail.dart'
     as _i4;
+import 'package:expert_flutter_dicoding/domain/usecases/get_tv_series_recommendations.dart'
+    as _i9;
 import 'package:expert_flutter_dicoding/domain/usecases/get_watchlist_tv_series.dart'
     as _i8;
 import 'package:mockito/mockito.dart' as _i1;
@@ -166,4 +168,41 @@ class MockGetWatchlistTvSeries extends _i1.Mock
         ),
         returnValue: _i5.Future<bool>.value(false),
       ) as _i5.Future<bool>);
+}
+
+/// A class which mocks [GetTvSeriesRecommendations].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetTvSeriesRecommendations extends _i1.Mock
+    implements _i9.GetTvSeriesRecommendations {
+  MockGetTvSeriesRecommendations() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.TvSeriesRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeTvSeriesRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.TvSeriesRepository);
+
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute(int? id) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [id],
+        ),
+        returnValue:
+            _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>>.value(
+                _FakeEither_1<_i6.Failure, List<_i7.TvSeries>>(
+          this,
+          Invocation.method(
+            #execute,
+            [id],
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>>);
 }

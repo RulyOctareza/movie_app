@@ -1,3 +1,4 @@
+import 'package:expert_flutter_dicoding/core/state_enum.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/tv_series.dart';
@@ -38,4 +39,4 @@ class TvSeriesSearchNotifier extends ChangeNotifier {
   }
 }
 
-enum RequestState { empty, loading, loaded, error }
+

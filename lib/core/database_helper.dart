@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../core/constants.dart';
-import '../data/models/movie_model.dart';
-import '../data/models/tv_series_model.dart';
 
 class DatabaseHelper {
   static DatabaseHelper? _instance;

@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:expert_flutter_dicoding/core/styles.dart';
+import 'package:expert_flutter_dicoding/core/constants.dart';
+import 'package:expert_flutter_dicoding/core/state_enum.dart';
+import 'package:expert_flutter_dicoding/domain/entities/tv_series.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/constants.dart' hide kTextTheme, kRichBlack;
-import '../../domain/entities/tv_series.dart';
 import '../providers/tv_series_detail_notifier.dart';
 
 class TvSeriesDetailPage extends StatefulWidget {
@@ -219,6 +219,68 @@ class DetailContent extends StatelessWidget {
                                 color: kRichBlack,
                               ),
                               textAlign: TextAlign.justify,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Recommendations',
+                              style: kTextTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: kRichBlack,
+                              ),
+                            ),
+                            Consumer<TvSeriesDetailNotifier>(
+                              builder: (context, provider, child) {
+                                if (provider.recommendationState ==
+                                    RequestState.loading) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else if (provider.recommendationState ==
+                                    RequestState.loaded) {
+                                  if (provider
+                                      .tvSeriesRecommendations.isEmpty) {
+                                    return const Text('No recommendations');
+                                  }
+                                  return SizedBox(
+                                    height: 150,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: provider
+                                          .tvSeriesRecommendations.length,
+                                      itemBuilder: (context, index) {
+                                        final tv = provider
+                                            .tvSeriesRecommendations[index];
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Navigator.pushReplacementNamed(
+                                              context,
+                                              '/detail-tv',
+                                              arguments: tv.id,
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 100,
+                                            margin: const EdgeInsets.all(8),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  '${Urls.baseImageUrl}${tv.posterPath}',
+                                              placeholder: (context, url) =>
+                                                  const Center(
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                } else {
+                                  return const Text(
+                                      'Failed to load recommendations');
+                                }
+                              },
                             ),
                             const SizedBox(height: 16),
                           ],

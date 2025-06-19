@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:expert_flutter_dicoding/core/failure.dart';
+import 'package:expert_flutter_dicoding/core/state_enum.dart';
 import 'package:expert_flutter_dicoding/domain/entities/tv_series.dart';
 import 'package:expert_flutter_dicoding/domain/usecases/get_tv_series_detail.dart';
 import 'package:expert_flutter_dicoding/domain/usecases/get_watchlist_tv_series.dart';
+import 'package:expert_flutter_dicoding/domain/usecases/get_tv_series_recommendations.dart';
 import 'package:expert_flutter_dicoding/presentation/providers/tv_series_detail_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -13,24 +15,14 @@ import 'tv_series_detail_notifier_test.mocks.dart';
 @GenerateMocks([
   GetTvSeriesDetail,
   GetWatchlistTvSeries,
+  GetTvSeriesRecommendations,
 ])
 void main() {
   late TvSeriesDetailNotifier provider;
   late GetTvSeriesDetail mockGetTvSeriesDetail;
   late GetWatchlistTvSeries mockGetWatchlistTvSeries;
+  late GetTvSeriesRecommendations mockGetTvSeriesRecommendations;
   late int listenerCallCount;
-
-  setUp(() {
-    listenerCallCount = 0;
-    mockGetTvSeriesDetail = MockGetTvSeriesDetail();
-    mockGetWatchlistTvSeries = MockGetWatchlistTvSeries();
-    provider = TvSeriesDetailNotifier(
-      getTvSeriesDetail: mockGetTvSeriesDetail,
-      getWatchlistTvSeries: mockGetWatchlistTvSeries,
-    )..addListener(() {
-        listenerCallCount++;
-      });
-  });
 
   const tId = 1;
   const tTvSeries = TvSeries(
@@ -40,6 +32,22 @@ void main() {
     overview: 'Overview',
     voteAverage: 8.0,
   );
+
+  setUp(() {
+    listenerCallCount = 0;
+    mockGetTvSeriesDetail = MockGetTvSeriesDetail();
+    mockGetWatchlistTvSeries = MockGetWatchlistTvSeries();
+    mockGetTvSeriesRecommendations = MockGetTvSeriesRecommendations();
+    when(mockGetTvSeriesRecommendations.execute(tId))
+        .thenAnswer((_) async => const Right(<TvSeries>[]));
+    provider = TvSeriesDetailNotifier(
+      getTvSeriesDetail: mockGetTvSeriesDetail,
+      getWatchlistTvSeries: mockGetWatchlistTvSeries,
+      getTvSeriesRecommendations: mockGetTvSeriesRecommendations,
+    )..addListener(() {
+        listenerCallCount++;
+      });
+  });
 
   group('Get TV Series Detail', () {
     test('should get data from the usecase', () async {
@@ -56,7 +64,7 @@ void main() {
       verify(mockGetTvSeriesDetail.execute(tId));
       expect(provider.tvSeriesState, RequestState.loaded);
       expect(provider.tvSeries, tTvSeries);
-      expect(listenerCallCount, 2);
+      expect(listenerCallCount, 3); // 2 (detail) + 3 (rekomendasi)
     });
 
     test('should return error when data is unsuccessful', () async {
