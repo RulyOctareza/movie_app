@@ -58,7 +58,8 @@ class TvSeriesDetailNotifier extends ChangeNotifier {
         // Fetch recommendations
         _recommendationState = RequestState.loading;
         notifyListeners();
-        final recommendationResult = await getTvSeriesRecommendations.execute(id);
+        final recommendationResult =
+            await getTvSeriesRecommendations.execute(id);
         recommendationResult.fold(
           (failure) {
             _recommendationState = RequestState.error;
@@ -111,4 +112,3 @@ class TvSeriesDetailNotifier extends ChangeNotifier {
     await loadWatchlistStatus(tvSeries.id);
   }
 }
-

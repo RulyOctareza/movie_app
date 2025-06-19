@@ -46,7 +46,8 @@ class DummyTvSeriesDetailNotifier extends TvSeriesDetailNotifier {
       : super(
           getTvSeriesDetail: GetTvSeriesDetail(DummyTvSeriesRepository()),
           getWatchlistTvSeries: GetWatchlistTvSeries(DummyTvSeriesRepository()),
-          getTvSeriesRecommendations: GetTvSeriesRecommendations(DummyTvSeriesRepository()),
+          getTvSeriesRecommendations:
+              GetTvSeriesRecommendations(DummyTvSeriesRepository()),
         );
   @override
   bool get isAddedToWatchlist => false;

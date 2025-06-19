@@ -230,19 +230,25 @@ class DetailContent extends StatelessWidget {
                             ),
                             Consumer<TvSeriesDetailNotifier>(
                               builder: (context, provider, child) {
-                                if (provider.recommendationState == RequestState.loading) {
-                                  return const Center(child: CircularProgressIndicator());
-                                } else if (provider.recommendationState == RequestState.loaded) {
-                                  if (provider.tvSeriesRecommendations.isEmpty) {
+                                if (provider.recommendationState ==
+                                    RequestState.loading) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else if (provider.recommendationState ==
+                                    RequestState.loaded) {
+                                  if (provider
+                                      .tvSeriesRecommendations.isEmpty) {
                                     return const Text('No recommendations');
                                   }
                                   return SizedBox(
                                     height: 150,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: provider.tvSeriesRecommendations.length,
+                                      itemCount: provider
+                                          .tvSeriesRecommendations.length,
                                       itemBuilder: (context, index) {
-                                        final tv = provider.tvSeriesRecommendations[index];
+                                        final tv = provider
+                                            .tvSeriesRecommendations[index];
                                         return GestureDetector(
                                           onTap: () {
                                             Navigator.pushReplacementNamed(
@@ -255,9 +261,15 @@ class DetailContent extends StatelessWidget {
                                             width: 100,
                                             margin: const EdgeInsets.all(8),
                                             child: CachedNetworkImage(
-                                              imageUrl: '${Urls.baseImageUrl}${tv.posterPath}',
-                                              placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                                              imageUrl:
+                                                  '${Urls.baseImageUrl}${tv.posterPath}',
+                                              placeholder: (context, url) =>
+                                                  const Center(
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
                                             ),
                                           ),
                                         );
@@ -265,7 +277,8 @@ class DetailContent extends StatelessWidget {
                                     ),
                                   );
                                 } else {
-                                  return const Text('Failed to load recommendations');
+                                  return const Text(
+                                      'Failed to load recommendations');
                                 }
                               },
                             ),
