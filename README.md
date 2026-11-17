@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/preview/hero.png" alt="Movie App — ilustrasi aplikasi katalog film" width="100%">
+  <img src="docs/preview/hero.svg" alt="Movie App — ilustrasi aplikasi katalog film" width="100%">
 </p>
 
 <h1 align="center">Movie App — Expert Flutter</h1>
